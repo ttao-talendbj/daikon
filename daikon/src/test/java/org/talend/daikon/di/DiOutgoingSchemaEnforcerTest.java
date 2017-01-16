@@ -1,6 +1,7 @@
 package org.talend.daikon.di;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
@@ -236,4 +237,28 @@ public class DiOutgoingSchemaEnforcerTest {
         assertThat(transformedValue, equalTo((Object) expectedChar));
     }
 
+    /**
+     * Checks case when designSchema and runtimeSchema are different
+     */
+    @Test
+    public void testSetWrapped() throws Exception {
+        int[] expectedIndexMap = {0};
+
+        Schema designSchema = SchemaBuilder.builder().record("Record").fields()
+                .name("col0").type(AvroUtils._date()).noDefault()
+                .endRecord();
+
+        Schema runtimeSchema = SchemaBuilder.builder().record("Record").fields()
+                .name("field0").type().longType().noDefault()
+                .endRecord();
+
+        IndexedRecord indexedRecord = new GenericData.Record(runtimeSchema);
+        indexedRecord.put(0, 1467170137872L);
+
+        DiOutgoingSchemaEnforcer enforcer = EnforcerCreator
+                .createOutgoingEnforcer(designSchema, false);
+        enforcer.setWrapped(indexedRecord);
+        int[] actualIndexMap = enforcer.indexMap;
+        assertArrayEquals(expectedIndexMap, actualIndexMap);
+    }
 }
