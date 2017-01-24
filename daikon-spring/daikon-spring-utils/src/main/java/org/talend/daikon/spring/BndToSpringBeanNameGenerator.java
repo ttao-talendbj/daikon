@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
  */
 public class BndToSpringBeanNameGenerator extends AnnotationBeanNameGenerator {
 
-    static final public String BND_ANNOTATION = "aQute.bnd.annotation.component.Component"; //$NON-NLS-1$
+    public static final String BND_ANNOTATION = "aQute.bnd.annotation.component.Component"; //$NON-NLS-1$
 
     /**
      * Derive a bean name from one of the annotations on the class. First delegate to the super class and if it is not a
@@ -80,6 +80,6 @@ public class BndToSpringBeanNameGenerator extends AnnotationBeanNameGenerator {
         boolean isStereotype = annotationType.equals(BND_ANNOTATION)
                 || (metaAnnotationTypes != null && metaAnnotationTypes.contains(BND_ANNOTATION));
 
-        return (isStereotype && attributes != null && attributes.containsKey("name"));
+        return isStereotype && attributes != null && attributes.containsKey("name");
     }
 }
