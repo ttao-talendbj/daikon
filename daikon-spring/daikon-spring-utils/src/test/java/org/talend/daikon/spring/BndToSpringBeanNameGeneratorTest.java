@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.daikon.spring;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,16 +23,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- * created by sgandon on 18 nov. 2015
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ComponentScan(basePackages = "org.talend.daikon.spring", nameGenerator = BndToSpringBeanNameGenerator.class, includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = aQute.bnd.annotation.component.Component.class), excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*Osgi"))
 @SpringApplicationConfiguration(classes = BndToSpringBeanNameGeneratorTest.class)
 public class BndToSpringBeanNameGeneratorTest {
 
     @Autowired
-    ApplicationContext appContext;
+    private ApplicationContext appContext;
 
     @Test
     public void testBndBeanExists() {
