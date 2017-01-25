@@ -5,12 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.data.mongodb.MongoDbFactory;
-
-import com.mongodb.MongoClient;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -39,10 +40,10 @@ public class MultiTenancyMongoDbConfiguration {
         @Override
         public Object postProcessAfterInitialization(Object bean, String beanName) {
             if (bean instanceof MongoDbFactory) {
-                LOGGER.info("Enable MongoDB multi tenancy support '{}' ({})...", bean.getClass(), beanName);
+                LOGGER.info("Enabling MongoDB multi tenancy support on '{}' (wrapped bean: {})...", bean.getClass(), beanName);
                 final TenantInformationProvider tenantProvider = applicationContext.getBean(TenantInformationProvider.class);
-                final MongoClient mongoClient = applicationContext.getBean(MongoClient.class);
-                return new MultiTenancyMongoDbFactory((MongoDbFactory) bean, tenantProvider, mongoClient);
+                final MongoClientProvider mongoClientProvider = applicationContext.getBean(MongoClientProvider.class);
+                return new MultiTenancyMongoDbFactory((MongoDbFactory) bean, tenantProvider, mongoClientProvider);
             }
             return bean;
         }

@@ -1,10 +1,13 @@
 package org.talend.daikon.spring.mongo;
 
 import static org.junit.Assert.assertEquals;
+import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeHost;
 import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
 
 import java.util.List;
+import java.util.Map;
 
+import com.github.fakemongo.Fongo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
@@ -138,4 +141,27 @@ public class MultiTenantMongoDbFactoryTest extends AbstractMultiTenantMongoDbTes
         mongoTemplate.insert(tenant1);
     }
 
+    @Test
+    public void shouldUseDifferentHosts() throws Exception {
+        // Given
+        final TestData tenant1 = new TestData();
+        tenant1.setId("1");
+        tenant1.setValue("tenant1");
+
+        final TestData tenant2 = new TestData();
+        tenant2.setId("1");
+        tenant2.setValue("tenant2");
+
+        // When
+        changeTenant("tenant1");
+        changeHost("tenant1Host");
+        testRepository.insert(tenant1);
+        changeTenant("tenant2");
+        changeHost("tenant2Host");
+        testRepository.insert(tenant2);
+
+        // Then
+        final Map<String, Fongo> instances = TestMultiTenantConfiguration.getFongoInstances();
+        assertEquals(2, instances.size());
+    }
 }

@@ -1,6 +1,6 @@
 package org.talend.daikon.spring.mongo;
 
-import org.springframework.data.authentication.UserCredentials;
+import com.mongodb.MongoClientURI;
 
 /**
  * <p>
@@ -23,12 +23,7 @@ public interface TenantInformationProvider {
     String getDatabaseName();
 
     /**
-     * @return The {@link UserCredentials credentials} to be used for connection to the database.
+     * @return A {@link MongoClientURI} object that describes where the mongo db host is.
      */
-    UserCredentials getCredentials();
-
-    /**
-     * @return The MongoDB database name to be used for authentication (may differ or not from {@link #getDatabaseName()}).
-     */
-    String getAuthenticationDatabaseName();
+    MongoClientURI getDatabaseURI();
 }

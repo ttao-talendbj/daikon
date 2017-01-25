@@ -2,23 +2,22 @@ package org.talend.daikon.spring.mongo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoDbUtils;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.util.Assert;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 /**
- * A {@link SimpleMongoDbFactory} that allows external code to choose which MongoDB database should be accessed.
+ * A {@link MongoDbFactory} that allows external code to choose which MongoDB database should be accessed.
  *
  * @see TenantInformationProvider
  */
-class MultiTenancyMongoDbFactory implements MongoDbFactory {
+class MultiTenancyMongoDbFactory implements MongoDbFactory, DisposableBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiTenancyMongoDbFactory.class);
 
@@ -26,42 +25,31 @@ class MultiTenancyMongoDbFactory implements MongoDbFactory {
 
     private final TenantInformationProvider tenantProvider;
 
-    private final MongoClient mongoClient;
+    private final MongoClientProvider mongoClientProvider;
 
-    MultiTenancyMongoDbFactory(final MongoDbFactory delegate, final TenantInformationProvider tenantProvider,
-            final MongoClient mongoClient) {
+    MultiTenancyMongoDbFactory(final MongoDbFactory delegate, //
+                               final TenantInformationProvider tenantProvider, //
+                               final MongoClientProvider mongoClientProvider) {
         this.delegate = delegate;
         this.tenantProvider = tenantProvider;
-        this.mongoClient = mongoClient;
+        this.mongoClientProvider = mongoClientProvider;
     }
 
     @Override
     public DB getDb() {
         // Multi tenancy database name selection
         final String databaseName;
-        final UserCredentials credentials;
-        final String authenticationDatabase;
         try {
             databaseName = tenantProvider.getDatabaseName();
-            credentials = tenantProvider.getCredentials();
-            authenticationDatabase = tenantProvider.getAuthenticationDatabaseName();
         } catch (Exception e) {
-            throw new InvalidDataAccessResourceUsageException("Unable to retrieve tenant information.", e);
+            throw new InvalidDataAccessResourceUsageException("Unable to retrieve database name.", e);
         }
         Assert.hasText(databaseName, "Database name must not be empty.");
         LOGGER.debug("Using '{}' as Mongo database.", databaseName);
 
         // Get MongoDB database using tenant information
-        // Using deprecated method as it's the only one that allows override of mongo client's.
-        DB db = MongoDbUtils.getDB(mongoClient, databaseName, credentials, authenticationDatabase);
-
-        // Get WriteConcern from mongo client
-        if (mongoClient.getWriteConcern() != null) {
-            db.setWriteConcern(mongoClient.getWriteConcern());
-        }
-
-        // All clear: return database
-        return db;
+        MongoClient mongoClient = mongoClientProvider.get(tenantProvider);
+        return MongoDbUtils.getDB(mongoClient, databaseName);
     }
 
     @Override
@@ -73,6 +61,11 @@ class MultiTenancyMongoDbFactory implements MongoDbFactory {
     @Override
     public PersistenceExceptionTranslator getExceptionTranslator() {
         return delegate.getExceptionTranslator();
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        mongoClientProvider.close();
     }
 
 }

@@ -51,51 +51,22 @@ Note: property defaults to `false`, so your application configuration to explici
             }
 
             @Override
-            public UserCredentials getCredentials() {
-                // Fetch credentials when establishing a connection
-            }
-
-            @Override
-            public String getAuthenticationDatabase() {
-                // Database for authentication may differ from content database.
+            public MongoClientURI getDatabaseURI() {
+                // Returns the connection URL (e.g. "mongodb://fake_host:27017/");
             }
         };
     }
 
-If you don't add this bean to your context, you will have expected startup error such as:
-
-    ***************************
-    APPLICATION FAILED TO START
-    ***************************
-    
-    Description:
-    
-    Field [...] required a bean of type 'org.talend.daikon.spring.mongo.TenantInformationProvider' that could not be found.
+5) Add a `org.talend.daikon.spring.mongo.MongoClientProvider` implementation in your application and expose it as a Spring Bean. The implementation `org.talend.daikon.spring.mongo.SimpleMongoClientProvider` is available for quick start.
+If you need more advanced cache management, consider providing a custom implementation. 
 
 5) On startup of your application, you should see:
 
 
-    09:41:53.236 [main] INFO  o.t.d.s.m.MultiTenancyMongoDbConfiguration - Enable MongoDB multi tenancy support 'class org.springframework.data.mongodb.core.SimpleMongoDbFactory' (defaultMongoDbFactory)...
+    09:41:53.236 [main] INFO  o.t.d.s.m.MultiTenancyMongoDbConfiguration - Enabling MongoDB multi tenancy support on 'class org.springframework.data.mongodb.core.SimpleMongoDbFactory' (wrapped bean: defaultMongoDbFactory)...
 
 
 6) And it's done, all the `MongoTemplate` or `MongoRepository` will work with multi tenancy without changing a line of code in them.
-
-Troubleshoot
-------------
-
-**Spring complains about a missing MongoClient**
-
-You *need* to expose a MongoClient as a bean. The default MongoDbFactory should be created that way:
-
-    /**
-     * @return the mongodb factory bean
-     */
-    @Bean
-    public MongoDbFactory mongoDbFactory(MongoClient client) throws UnknownHostException {
-        return new SimpleMongoDbFactory(client, database);
-    }
-
-The mongo client is not created in the method that creates the MongoDbFactory instance but injected. This is important since the multi tenancy code for MongoDb expects a mongo client bean in the context.
 
 How it works
 -----------
