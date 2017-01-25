@@ -25,6 +25,7 @@
         <module>daikon</module>
         <module>daikon-spring</module>
         <module>daikon-service</module>
+        <module>reporting</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
@@ -114,7 +115,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.4.201502262128</version>
+                <version>0.7.8</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
