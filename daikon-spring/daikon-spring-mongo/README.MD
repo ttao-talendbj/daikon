@@ -4,11 +4,7 @@ Multi tenancy support (for Spring data MongoDB)
 This module provides support for multi tenancy over Spring Data MongoDB:
 * Automatically wraps the previously existing MongoDbFactory to support multi-tenancy.
 * Allow to have the following information per tenant: database name, credentials and authentication database (MongoDb apparently authorizes to use another database name for authorization).
-
-It does **not** allow to have a MongoDB host per tenant. It allows you to have single MongoDB database per tenant. 
-
-*TODO*
-* A careful look at how connection pool & cie performs.
+* Allow to have a MongoDB host per tenant.
 
 Known limitations
 -----------------
