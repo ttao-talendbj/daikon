@@ -12,14 +12,21 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.talend.daikon.definition.Definition;
+import org.talend.daikon.definition.DefinitionImageType;
 import org.talend.daikon.definition.service.DefinitionRegistryService;
 import org.talend.daikon.i18n.I18nMessages;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
@@ -63,6 +70,16 @@ public class TestPropertiesTestUtils {
         public String getImagePath() {
             return null;
         }
+
+        @Override
+        public String getImagePath(DefinitionImageType type) {
+            return null;
+        }
+
+        @Override
+        public String getIconKey() {
+            return null;
+        }
     }
 
     @Test
@@ -74,6 +91,7 @@ public class TestPropertiesTestUtils {
 
         ErrorCollector errorCollector = spy(new ErrorCollector());
         // check when everything is fine
+        assertThat(repDef, notNullValue());
         when(repDef.getDisplayName()).thenReturn("foo");
         when(repDef.getTitle()).thenReturn("bar");
 
@@ -98,11 +116,10 @@ public class TestPropertiesTestUtils {
         PropertiesTestUtils.assertAlli18nAreSetup(defRegServ, errorCollector);
 
         verify(errorCollector, times(2)).addError(any(Throwable.class));
-
     }
 
     @Test
-    public void testAssertAllImagesAreSetup() {
+    public void testAssertAnIconIsSetup() {
         // create a registry with one definition
         DefinitionRegistryService defRegServ = mock(DefinitionRegistryService.class);
         Definition repDef = when(mock(ADefinition.class).getName()).thenReturn("NAME").getMock();
@@ -110,27 +127,61 @@ public class TestPropertiesTestUtils {
         when(defRegServ.getDefinitionsMapByType(Definition.class)).thenReturn(Collections.singletonMap("NAME", repDef));
 
         // check when everything is fine
+        assertThat(repDef, notNullValue());
+
+        // There is a PNG icon available.
         ErrorCollector errorCollector = spy(new ErrorCollector());
-        when(repDef.getImagePath()).thenReturn("/org/talend/daikon/properties/messages.properties");
+        when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32))
+                .thenReturn("/org/talend/daikon/properties/messages.properties");
+        when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
+        when(repDef.getIconKey()).thenReturn(null);
 
-        PropertiesTestUtils.assertAllImagesAreSetup(defRegServ, errorCollector);
-
+        PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
         verify(errorCollector, times(0)).addError(any(Throwable.class));
 
-        // check when path is missing
+        // There is an SVG icon available.
         errorCollector = spy(new ErrorCollector());
-        when(repDef.getImagePath()).thenReturn(null);
+        when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
+        when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn("/org/talend/daikon/properties/messages.properties");
+        when(repDef.getIconKey()).thenReturn(null);
 
-        PropertiesTestUtils.assertAllImagesAreSetup(defRegServ, errorCollector);
+        PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
+        verify(errorCollector, times(0)).addError(any(Throwable.class));
 
+        // There is an iconKey available.
+        errorCollector = spy(new ErrorCollector());
+        when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
+        when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
+        when(repDef.getIconKey()).thenReturn("icon-key");
+
+        PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
+        verify(errorCollector, times(0)).addError(any(Throwable.class));
+
+        // check when no icon information is present
+        errorCollector = spy(new ErrorCollector());
+        when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
+        when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
+        when(repDef.getIconKey()).thenReturn(null);
+
+        PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
         verify(errorCollector, times(1)).addError(any(Throwable.class));
 
-        // check when path is wrong
+        // There is a PNG icon available, but the path is wrong
         errorCollector = spy(new ErrorCollector());
-        when(repDef.getImagePath()).thenReturn("foo");
+        when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn("foo");
+        when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
+        when(repDef.getIconKey()).thenReturn(null);
 
-        PropertiesTestUtils.assertAllImagesAreSetup(defRegServ, errorCollector);
+        PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
+        verify(errorCollector, times(1)).addError(any(Throwable.class));
 
+        // There is an SVG icon available.
+        errorCollector = spy(new ErrorCollector());
+        when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
+        when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn("foo");
+        when(repDef.getIconKey()).thenReturn(null);
+
+        PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
         verify(errorCollector, times(1)).addError(any(Throwable.class));
     }
 
