@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>org.talend.daikon</groupId>
 		<artifactId>daikon-parent</artifactId>
-		<version>0.14.0</version>
+		<version>0.14.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>daikon</artifactId>
-	<version>0.14.0</version>
+	<version>0.14.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<name>Daikon main shared library</name>
