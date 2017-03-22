@@ -100,12 +100,12 @@ public class UiSchemaConstants {
     /**
      * Custom widget type. Display a schema editor, which let the user configure the Columns metadata
      */
-    public static final String CUSTOM_TYPE_SCHEMA = "schema";
+    public static final String CUSTOM_TYPE_SCHEMA = "hidden";
 
     /**
      * Custom widget type. Display a button
      */
-    public static final String CUSTOM_TYPE_BUTTON = "button";
+    public static final String CUSTOM_TYPE_BUTTON = "hidden";
 
     // Mapping between Widget type and ui-schema type
     private static Map<String, String> WIDGET_MAPPING = new HashMap<>();
