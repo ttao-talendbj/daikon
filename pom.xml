@@ -30,7 +30,8 @@
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
-    </scm>
+      <tag>maintenance/0.16</tag>
+  </scm>
     <repositories>
         <repository>
             <id>talend_nexus</id>
