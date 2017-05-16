@@ -84,8 +84,9 @@ with the `RollingFileAppender` in your `logback.xml`, `log4j.xml` or `log4j2.xml
       <fileNamePattern>${LOG_PATH}/application.%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
     </rollingPolicy>
-    <layout class="org.talend.daikon.logging.event.layout.LogbackJSONLayout" locationInfo="false">
+    <layout class="org.talend.daikon.logging.event.layout.LogbackJSONLayout">
         <param name="UserFields" value="" />
+        <param name="LocationInfo" value="false"/>
     </layout>
  </appender>
   <root level="INFO">
@@ -106,8 +107,9 @@ with the `RollingFileAppender` in your `logback.xml`, `log4j.xml` or `log4j2.xml
         <param name="MaxFileSize" value="50MB" />
         <param name="MaxBackupIndex" value="20" />
         <param name="encoding" value="UTF-8" />
-        <layout class="org.talend.daikon.logging.event.layout.Log4jJSONLayout" locationInfo="false">
+        <layout class="org.talend.daikon.logging.event.layout.Log4jJSONLayout">
             <param name="UserFields" value="" />
+            <param name="LocationInfo" value="false"/>
         </layout>
     </appender>   
     <root> 
@@ -171,7 +173,7 @@ The field names listed here are the default field names.
 | `stackTrace`      | (Only if a throwable was logged) The stacktrace of the throwable.  Stackframes are separated by line endings.
 | `correaltionId`   | The correlationd ids if it's enabled [Tracking user activity ids using Slf4j](#correlation_id)
 
-If you set `locationInfo` property  to `true` in your layout log4j/logback configuration you will have these more following fields
+If you set `LocationInfo` property  to `true` in your layout log4j/logback configuration you will have these more following fields
 
 | Field             | Description
 |-------------------|------------
@@ -364,11 +366,11 @@ To enable tracking user activity ids in the logs you have to :
    "exportable":"Whether the log should be exported to Zipkin or not",
    "logTimestamp":"2016-12-13T13:33:39.934Z",
    "serverTimestamp":"2016-12-13T13:33:40.934Z",
-   "agentId":"tenantId",
+   "accountId":"tenantId",
    "audit":"false",
    "customInfo":{
 	  "my.custom.data":"my custom test data",
-	  "exceutionId":"9454554dfc-1024585-410c0-d464124
+	  "executionId":"9454554dfc-1024585-410c0-d464124
     }
 }
 ```

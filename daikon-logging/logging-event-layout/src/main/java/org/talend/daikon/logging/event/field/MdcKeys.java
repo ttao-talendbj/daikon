@@ -8,10 +8,7 @@ package org.talend.daikon.logging.event.field;
 public final class MdcKeys {
 
     //The tenant Id (account Id)
-    public static final String AGENT_ID = "agentId";
-
-    //The job  Id
-    public static final String JOB_ID = "jobId";
+    public static final String ACCOUNT_ID = "accountId";
 
     //The job execution Id
     public static final String EXECUTION_ID = "executionId";
