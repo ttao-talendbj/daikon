@@ -1,7 +1,26 @@
 package org.talend.daikon.serialize;
 
-import static org.talend.daikon.properties.presentation.Widget.*;
-import static org.talend.daikon.properties.property.PropertyFactory.*;
+import static org.talend.daikon.properties.presentation.Widget.BUTTON_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.DATALIST_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.FILE_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.HIDDEN_TEXT_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.NAME_SELECTION_AREA_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.NAME_SELECTION_REFERENCE_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.RADIO_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.SCHEMA_EDITOR_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.SCHEMA_REFERENCE_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.SELECT_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.TABLE_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.TEXT_AREA_WIDGET_TYPE;
+import static org.talend.daikon.properties.presentation.Widget.widget;
+import static org.talend.daikon.properties.property.PropertyFactory.newBoolean;
+import static org.talend.daikon.properties.property.PropertyFactory.newDate;
+import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
+import static org.talend.daikon.properties.property.PropertyFactory.newEnumList;
+import static org.talend.daikon.properties.property.PropertyFactory.newInteger;
+import static org.talend.daikon.properties.property.PropertyFactory.newProperty;
+import static org.talend.daikon.properties.property.PropertyFactory.newSchema;
+import static org.talend.daikon.properties.property.PropertyFactory.newString;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -282,7 +301,7 @@ public class FullExampleProperties extends PropertiesImpl {
         if (methodCalled.size() == 25) {
             return ValidationResult.OK;
         } else {
-            return new ValidationResult().setStatus(Result.ERROR).setMessage("some method where not called :" + methodCalled);
+            return new ValidationResult(Result.ERROR, "some method where not called :" + methodCalled);
         }
     }
 
