@@ -27,6 +27,11 @@ public class UiSchemaConstants {
     public static final String TAG_ORDER = "ui:order";
 
     /**
+     * Build-in tag. Represent the widget autofocus
+     */
+    public static final String TAG_AUTO_FOCUS = "ui:autofocus";
+
+    /**
      * Custom tag. Represent the widget trigger. It could be
      * TRIGGER_AFTER/TRIGGER_BEFORE_PRESENT/TRIGGER_BEFORE_ACTIVATE/TRIGGER_VALIDATE
      */
