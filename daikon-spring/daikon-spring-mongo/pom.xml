@@ -104,4 +104,8 @@
 
 		</plugins>
 	</build>
+
+  <scm>
+    <tag>maintenance/0.17</tag>
+  </scm>
 </project>
