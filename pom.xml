@@ -28,6 +28,7 @@
         <module>reporting</module>
         <module>daikon-content-service</module>
 		<module>daikon-logging</module>
+        <module>daikon-events</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>

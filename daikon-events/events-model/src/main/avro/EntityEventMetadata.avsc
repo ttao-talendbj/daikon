@@ -1,0 +1,35 @@
+{
+  "name" : "EntityEventMetadata",
+  "doc" : "When this event is related to an entity change",
+  "namespace": "org.talend.daikon.events",
+  "type" : "record",
+  "fields" : [
+    {
+      "name" : "entity",
+      "type" : {
+        "name" : "EntityId",
+        "namespace" : "org.talend.daikon.events",
+        "type" : "record",
+        "fields" : [
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "changeType",
+      "type": {
+        "type": "enum",
+          "name": "ChangeType",
+          "namespace": "org.talend.daikon.events",
+          "symbols": ["CREATE", "UPDATE", "DELETE"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "name": "EventMetadata",
+  "doc" : "Defines common events metadata structure",
+  "namespace": "org.talend.daikon.events",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "doc": "Event UUID",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "doc": "Event creation date - UTC",
+      "type": "long"
+    },
+    {
+      "name": "accountId",
+      "doc": "Tenant identifier",
+      "type": "string"
+    },
+    {
+      "name": "issuer",
+      "doc": "Description of the service that created this event",
+      "type": {
+        "name": "EventIssuer",
+        "namespace": "org.talend.daikon.events",
+        "type": "record",
+        "fields": [
+          {
+            "name": "service",
+            "doc" : "Identifier of the service that created this event",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "doc" : "Version of the service that created this event",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "userId",
+      "doc": "Id of the user who initiated this event",
+      "type": "string",
+      "default": "SYSTEM"
+    },
+    {
+      "name": "requestId",
+      "doc": "Id of the request that initiated this event",
+      "type": "string"
+    },
+    {
+      "name": "requestDetails",
+      "doc" : "Optional additional details on the request that initiated this event",
+      "type" : [
+        "null",
+        {
+          "name": "RequestDetails",
+          "namespace": "org.talend.daikon.events",
+          "type": "record",
+          "fields" : [
+            {
+              "name" : "type",
+              "doc" : "Type of request",
+              "type" : "string"
+            },
+            {
+              "name" : "parameters",
+              "type" : {
+                "type" : "map",
+                "values" : "string"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transactionId",
+      "doc": "An optional correlation id in case this event was issued by a bulk request",
+      "type": ["null", "string"]
+    }
+  ]
+}
