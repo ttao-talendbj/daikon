@@ -6,6 +6,9 @@ import org.talend.cqrs.poc.preparation.command.create.PreparationCreatedEvent;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdatedEvent;
 
+/**
+ * listen to all Preparation events and store/update the model in the local DB tuned to the query API.
+ */
 @Component
 public class PreparationQueryObjectUpdater {
 
@@ -20,7 +23,7 @@ public class PreparationQueryObjectUpdater {
         PreparationQueryObject save = repo.save(new PreparationQueryObject(dce.getId(), dce.getName(), dce.getDesc()));
         System.out.println("saved:" + save);
     }
-    
+
     @EventHandler
     public void on(StepAddedEvent sae) {
         PreparationQueryObject prep = repo.findOne(sae.getId());

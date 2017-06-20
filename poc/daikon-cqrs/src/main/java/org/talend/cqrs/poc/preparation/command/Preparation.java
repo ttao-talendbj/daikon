@@ -22,7 +22,7 @@ public class Preparation {
 
     @AggregateIdentifier
     private String id;
-    
+
     private int NbOfSteps;
 
     public Preparation() {
@@ -32,7 +32,8 @@ public class Preparation {
     public Preparation(PreparationCreateCommand preparationCC) {
         // check things
         Assert.hasLength(preparationCC.getName());
-        // event sourcing here, do not store the data.
+        // event sourcing here. Never change the state of the aggregator in commandhandlers, do so in Event handlers,
+        // see @EvenSourcingHandler methods below.
         apply(new PreparationCreatedEvent(preparationCC.getId(), preparationCC.getName(), preparationCC.getDesc()));
     }
 
@@ -41,26 +42,22 @@ public class Preparation {
         this.id = dce.getId();
     }
 
-    
     @CommandHandler
-    public void stepAdd(StepAddCommand stepAddC)  {
-        if (NbOfSteps >= 2){
+    public void stepAdd(StepAddCommand stepAddC) {
+        if (NbOfSteps >= 2) {
             throw new IllegalArgumentException();
         }
         apply(new StepAddedEvent(id, stepAddC.getStepType()));
     }
 
     @EventSourcingHandler
-    public void on(StepAddedEvent sae){
+    public void on(StepAddedEvent sae) {
         NbOfSteps++;
     }
-    
-    
-    
+
     @CommandHandler
     public void update(PreparationUpdateCommand preparationUC) {
         apply(new PreparationUpdatedEvent(id, preparationUC.getName(), preparationUC.getDesc()));
     }
-
 
 }
