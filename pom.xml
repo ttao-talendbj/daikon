@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.talend.daikon</groupId>
     <artifactId>daikon-parent</artifactId>
-    <version>0.17.1</version>
+    <version>0.17.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Daikon - parent pom</name>
     <url>https://github.com/Talend/daikon</url>
@@ -31,7 +31,7 @@
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
-      <tag>daikon-0.17.1</tag>
+      <tag>maintenance/0.17</tag>
   </scm>
     <repositories>
         <repository>
