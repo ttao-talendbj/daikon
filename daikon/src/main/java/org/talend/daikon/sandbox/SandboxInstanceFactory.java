@@ -28,6 +28,9 @@ import org.talend.java.util.ClosableLRUMap;
  */
 public class SandboxInstanceFactory {
 
+    /** A useful constant value for ClassLoaders that can be reused and placed in the cache. */
+    public static final boolean CLASSLOADER_REUSABLE = true;
+
     /**
      * TODO: Add context variable to allow the user to configure the maximum size of the cache. Maybe using a
      * CacheBuilder.
@@ -63,11 +66,11 @@ public class SandboxInstanceFactory {
 
         // Determine whether the ClassLoader for the runtimeInfo can be safely cached for performance.
         ClassLoader sandboxClassLoader;
-        boolean reusableClassLoader = true;
+        boolean reusableClassLoader = CLASSLOADER_REUSABLE;
         if (runtimeInfo instanceof SandboxControl)
             reusableClassLoader = ((SandboxControl) runtimeInfo).isClassLoaderReusable();
 
-        if (reusableClassLoader) {
+        if (reusableClassLoader == CLASSLOADER_REUSABLE) {
             // When the ClassLoader is reusable, use it from the cache.
             synchronized (classLoaderCache) {
                 if (classLoaderCache.containsKey(runtimeInfo) && classLoaderCache.get(runtimeInfo) != null) {
@@ -84,7 +87,8 @@ public class SandboxInstanceFactory {
             sandboxClassLoader = createClassLoader(runtimeInfo, parentClassLoader);
         }
 
-        return new SandboxedInstance(runtimeInfo.getRuntimeClassName(), useCurrentJvmProperties, sandboxClassLoader);
+        return new SandboxedInstance(runtimeInfo.getRuntimeClassName(), useCurrentJvmProperties, sandboxClassLoader,
+                reusableClassLoader);
     }
 
     private static URLClassLoader createClassLoader(RuntimeInfo runtimeInfo, ClassLoader parentClassLoader) {
