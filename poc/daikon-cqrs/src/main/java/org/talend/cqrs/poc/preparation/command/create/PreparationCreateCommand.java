@@ -1,6 +1,14 @@
 package org.talend.cqrs.poc.preparation.command.create;
 
-public class PreparationCreateCommand {
+import org.talend.daikon.events.RequestContext;
+import org.talend.daikon.events.RequestContextProvider;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+public class PreparationCreateCommand implements RequestContextProvider {
+
+    private String requestId = UUID.randomUUID().toString();
 
     private String id;
 
@@ -38,4 +46,8 @@ public class PreparationCreateCommand {
         this.desc = desc;
     }
 
+    @Override
+    public RequestContext getRequestContext() {
+        return new RequestContext(requestId, null, "PreparationCreateCommand", new HashMap<>());
+    }
 }

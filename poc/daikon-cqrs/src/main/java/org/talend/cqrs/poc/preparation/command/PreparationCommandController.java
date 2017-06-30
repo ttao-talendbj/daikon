@@ -27,13 +27,12 @@ public class PreparationCommandController {
         String randomUUID = UUID.randomUUID().toString();
         return commandGateway.send(new PreparationCreateCommand(randomUUID, name, desc));
     }
-    
 
     @PostMapping("/step/{id}")
     public CompletableFuture<String> addStep(@PathVariable String id, @RequestParam(name = "type") String stepType) {
         return commandGateway.send(new StepAddCommand(id, stepType));
     }
-    
+
     @PostMapping("/{id}")
     public CompletableFuture<String> updatePreparation(@PathVariable String id, @RequestParam(name = "name") String name,
             @RequestParam(name = "desc", defaultValue = "") String desc) {

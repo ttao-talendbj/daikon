@@ -1,23 +1,18 @@
 {
   "name": "EventMetadata",
-  "doc" : "Defines common events metadata structure",
+  "doc" : "Defines common events metadata structure - containing a minimal subset of metadata that all events should provide",
   "namespace": "org.talend.daikon.events",
   "type": "record",
   "fields": [
     {
       "name": "id",
-      "doc": "Event UUID",
+      "doc": "Event unique identifier",
       "type": "string"
     },
     {
       "name": "timestamp",
-      "doc": "Event creation date - UTC",
+      "doc": "Event creation timestamp (number of milliseconds since Epoch)",
       "type": "long"
-    },
-    {
-      "name": "accountId",
-      "doc": "Tenant identifier",
-      "type": "string"
     },
     {
       "name": "issuer",
@@ -41,15 +36,19 @@
       }
     },
     {
-      "name": "userId",
-      "doc": "Id of the user who initiated this event",
-      "type": "string",
-      "default": "SYSTEM"
+      "name": "accountId",
+      "doc": "Account identifier in case of multi-tenancy. Null value means not in the context of a tenant",
+      "type": ["null", "string"]
     },
     {
-      "name": "requestId",
-      "doc": "Id of the request that initiated this event",
-      "type": "string"
+      "name": "userId",
+      "doc": "Id of the user who initiated this event. Null value means not authenticated",
+      "type": ["null", "string"]
+    },
+    {
+      "name": "correlationId",
+      "doc": "Id of the request that initiated this event.",
+      "type": ["null", "string"]
     },
     {
       "name": "requestDetails",
@@ -76,11 +75,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "transactionId",
-      "doc": "An optional correlation id in case this event was issued by a bulk request",
-      "type": ["null", "string"]
     }
   ]
 }

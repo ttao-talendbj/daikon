@@ -5,10 +5,12 @@ import org.springframework.messaging.MessageChannel;
 
 /**
  * defines the spring-cloud-stream output channel to be used. see @EnableBinding in
- * {@link AxonEventsToSpringMessageAdatapter}
+ * {@link AxonEventsToSpringMessageAdapter}
  */
 public interface ChannelDefinition {
 
-    @Output("output")
-    MessageChannel output();
+    String PREPARATION_EVENTS = "preparationEvents";
+
+    @Output(PREPARATION_EVENTS)
+    MessageChannel preparationEvents();
 }

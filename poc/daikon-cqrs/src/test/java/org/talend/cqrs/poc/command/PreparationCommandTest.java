@@ -14,6 +14,7 @@ import org.talend.cqrs.poc.preparation.command.steps.StepAddCommand;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdateCommand;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdatedEvent;
+import org.talend.daikon.events.EventMetadata;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -29,24 +30,25 @@ public class PreparationCommandTest {
     @Test
     public void testPreparationCreatedEvent() {
         fixture.givenNoPriorActivity().when(new PreparationCreateCommand("123", "my Prep", "desc"))
-                .expectEvents(new PreparationCreatedEvent("123", "my Prep", "desc"));
+                .expectEvents(new PreparationCreatedEvent(new EventMetadata(), "123", "my Prep", "desc"));
     }
 
     @Test
     public void testPreparationStepAddedEvent() {
-        fixture.given(new PreparationCreatedEvent("123", "my Prep", "desc"))
+        fixture.given(new PreparationCreatedEvent(new EventMetadata(), "123", "my Prep", "desc"))
                 .when(new StepAddCommand("123", "stepType")).expectEvents(new StepAddedEvent("123", "stepType"));
     }
 
     @Test
     public void testPreparationStepLimitRule() {
-        fixture.given(new PreparationCreatedEvent("123", "my Prep", "desc"), new StepAddedEvent("123", "foo"), new StepAddedEvent("123", "foo"))
-                .when(new StepAddCommand("123", "XstepType")).expectException(IllegalArgumentException.class);
+        fixture.given(new PreparationCreatedEvent(new EventMetadata(), "123", "my Prep", "desc"),
+                new StepAddedEvent("123", "foo"), new StepAddedEvent("123", "foo")).when(new StepAddCommand("123", "XstepType"))
+                .expectException(IllegalArgumentException.class);
     }
 
     @Test
     public void testPreparationUpdateEvent() {
-        fixture.given(new PreparationCreatedEvent("123", "my Prep", "desc"))
+        fixture.given(new PreparationCreatedEvent(new EventMetadata(), "123", "my Prep", "desc"))
                 .when(new PreparationUpdateCommand("123", "my Prep", "desc"))
                 .expectEvents(new PreparationUpdatedEvent("123", "my Prep", "desc"));
     }

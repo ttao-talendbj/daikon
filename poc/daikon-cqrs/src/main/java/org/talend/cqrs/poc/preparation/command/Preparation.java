@@ -1,7 +1,5 @@
 package org.talend.cqrs.poc.preparation.command;
 
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
-
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -13,6 +11,10 @@ import org.talend.cqrs.poc.preparation.command.steps.StepAddCommand;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdateCommand;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdatedEvent;
+import org.talend.daikon.events.EventMetadata;
+import org.talend.daikon.events.EventMetadataFactory;
+
+import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 @Aggregate
 public class Preparation {
@@ -29,12 +31,14 @@ public class Preparation {
     }
 
     @CommandHandler
-    public Preparation(PreparationCreateCommand preparationCC) {
+    public Preparation(PreparationCreateCommand preparationCC, EventMetadataFactory eventMetadataFactory) {
         // check things
         Assert.hasLength(preparationCC.getName());
         // event sourcing here. Never change the state of the aggregator in commandhandlers, do so in Event handlers,
         // see @EvenSourcingHandler methods below.
-        apply(new PreparationCreatedEvent(preparationCC.getId(), preparationCC.getName(), preparationCC.getDesc()));
+        EventMetadata eventMetadata = eventMetadataFactory.createEventMetadataBuilder(preparationCC);
+        apply(new PreparationCreatedEvent(eventMetadata, preparationCC.getId(), preparationCC.getName(),
+                preparationCC.getDesc()));
     }
 
     @EventSourcingHandler
