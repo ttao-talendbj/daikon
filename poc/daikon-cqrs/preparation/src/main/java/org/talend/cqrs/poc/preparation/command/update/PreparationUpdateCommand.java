@@ -1,8 +1,12 @@
 package org.talend.cqrs.poc.preparation.command.update;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.talend.daikon.events.RequestContext;
+import org.talend.daikon.events.RequestContextProvider;
 
-public class PreparationUpdateCommand {
+import java.util.HashMap;
+
+public class PreparationUpdateCommand implements RequestContextProvider {
 
     @TargetAggregateIdentifier
     private String id;
@@ -41,4 +45,8 @@ public class PreparationUpdateCommand {
         this.desc = desc;
     }
 
+    @Override
+    public RequestContext getRequestContext() {
+        return new RequestContext("toto", null, "PreparationUpdateCommand", new HashMap<>());
+    }
 }

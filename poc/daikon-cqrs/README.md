@@ -4,7 +4,7 @@ The goal of this is to show an example of the CQRS pattern in java using the [Ax
 
 
 here is a view of the pattern architecture
-![CQRS pattern](CQRS.jpg)
+![CQRS pattern](preparation/CQRS.jpg)
 
 Rest APIS
 --

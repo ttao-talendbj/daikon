@@ -1,0 +1,19 @@
+{
+  "name" : "StepAddedEvent",
+  "namespace": "org.talend.cqrs.poc.preparation",
+  "type" : "record",
+  "fields" : [
+    {
+      "name": "metadata",
+      "type": "org.talend.daikon.events.EventMetadata"
+    },
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "stepType",
+      "type": "string"
+    }
+  ]
+}

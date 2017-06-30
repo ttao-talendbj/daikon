@@ -5,12 +5,12 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.util.Assert;
+import org.talend.cqrs.poc.preparation.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreateCommand;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreatedEvent;
+import org.talend.cqrs.poc.preparation.command.create.PreparationUpdatedEvent;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddCommand;
-import org.talend.cqrs.poc.preparation.command.steps.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdateCommand;
-import org.talend.cqrs.poc.preparation.command.update.PreparationUpdatedEvent;
 import org.talend.daikon.events.EventMetadata;
 import org.talend.daikon.events.EventMetadataFactory;
 
@@ -47,11 +47,12 @@ public class Preparation {
     }
 
     @CommandHandler
-    public void stepAdd(StepAddCommand stepAddC) {
+    public void stepAdd(StepAddCommand stepAddC, EventMetadataFactory eventMetadataFactory) {
         if (NbOfSteps >= 2) {
             throw new IllegalArgumentException();
         }
-        apply(new StepAddedEvent(id, stepAddC.getStepType()));
+        EventMetadata eventMetadata = eventMetadataFactory.createEventMetadataBuilder(stepAddC);
+        apply(new StepAddedEvent(eventMetadata, id, stepAddC.getStepType()));
     }
 
     @EventSourcingHandler
@@ -60,8 +61,9 @@ public class Preparation {
     }
 
     @CommandHandler
-    public void update(PreparationUpdateCommand preparationUC) {
-        apply(new PreparationUpdatedEvent(id, preparationUC.getName(), preparationUC.getDesc()));
+    public void update(PreparationUpdateCommand preparationUC, EventMetadataFactory eventMetadataFactory) {
+        EventMetadata eventMetadata = eventMetadataFactory.createEventMetadataBuilder(preparationUC);
+        apply(new PreparationUpdatedEvent(eventMetadata, id, preparationUC.getName(), preparationUC.getDesc()));
     }
 
 }

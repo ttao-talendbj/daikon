@@ -12,11 +12,11 @@
 
 	<groupId>org.talend.cqrs</groupId>
 	<artifactId>cqrs-poc</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 
 	<name>CQRS poc</name>
-	<description>SQRS POC with Axon</description>
+	<description>CQRS POC with Axon</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +26,10 @@
 		<spring.boot.version>1.5.2.RELEASE</spring.boot.version>
 		<avro.version>1.8.1</avro.version>
 	</properties>
+
+	<modules>
+		<module>preparation</module>
+	</modules>
 
 
  <dependencyManagement>
@@ -44,125 +48,57 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-spring-boot-starter</artifactId>
+                <version>${axon.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-test</artifactId>
+                <version>${axon.version}</version>
+                <scope>test</scope>
+            </dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-stream-kafka</artifactId>
+				<!-- Push version for Kafka 0.10 support -->
+				<version>1.2.1.RELEASE</version>
+			</dependency>
+			<!-- Avro support -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-stream-schema</artifactId>
+				<version>1.2.1.RELEASE</version>
+			</dependency>
+			<!-- Force Kafka clients dependency -->
+			<dependency>
+				<groupId>org.apache.kafka</groupId>
+				<artifactId>kafka-clients</artifactId>
+				<version>0.10.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.talend.daikon</groupId>
+				<artifactId>events-model-spring-support</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.talend.daikon</groupId>
+				<artifactId>daikon</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.kafka</groupId>
+				<artifactId>spring-kafka-test</artifactId>
+				<version>1.2.2.RELEASE</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.jayway.restassured</groupId>
+				<artifactId>rest-assured</artifactId>
+				<version>2.9.0</version>
+				<scope>test</scope>
+			</dependency>
         </dependencies>
     </dependencyManagement>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.axonframework</groupId>
-			<artifactId>axon-spring-boot-starter</artifactId>
-			<version>${axon.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.axonframework</groupId>
-			<artifactId>axon-test</artifactId>
-			<version>${axon.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-stream</artifactId>
-		</dependency>
- 		<dependency>
- 			<groupId>org.springframework.cloud</groupId>
- 			<artifactId>spring-cloud-starter-stream-kafka</artifactId>
-			<!-- Push version for Kafka 0.10 support -->
-			<version>1.2.1.RELEASE</version>
- 		</dependency>
-		<!-- Avro support -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-stream-schema</artifactId>
-			<version>1.2.1.RELEASE</version>
-		</dependency>
-
-
-		<!-- Force Kafka clients dependency -->
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka-clients</artifactId>
-			<version>0.10.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.talend.daikon</groupId>
-			<artifactId>events-model-spring-support</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.talend.daikon</groupId>
-			<artifactId>daikon</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka-test</artifactId>
-			<version>1.2.2.RELEASE</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.jayway.restassured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>2.9.0</version>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring.boot.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.avro</groupId>
-				<artifactId>avro-maven-plugin</artifactId>
-				<version>${avro.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>schema</goal>
-						</goals>
-						<configuration>
-							<imports>
-								<import>/Users/bguillon/dev/daikon/daikon-events/events-model/src/main/avro</import>
-							</imports>
-							<stringType>String</stringType>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-
-
 </project>

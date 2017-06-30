@@ -1,8 +1,12 @@
 package org.talend.cqrs.poc.preparation.command.steps;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.talend.daikon.events.RequestContext;
+import org.talend.daikon.events.RequestContextProvider;
 
-public class StepAddCommand {
+import java.util.HashMap;
+
+public class StepAddCommand implements RequestContextProvider {
 
     @TargetAggregateIdentifier
     private String id;
@@ -30,4 +34,8 @@ public class StepAddCommand {
         this.stepType = stepType;
     }
 
+    @Override
+    public RequestContext getRequestContext() {
+        return new RequestContext("todo", null, "StepAddCommand", new HashMap<>());
+    }
 }

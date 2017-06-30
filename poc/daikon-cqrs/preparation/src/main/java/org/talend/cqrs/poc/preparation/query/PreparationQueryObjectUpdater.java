@@ -2,9 +2,9 @@ package org.talend.cqrs.poc.preparation.query;
 
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
+import org.talend.cqrs.poc.preparation.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreatedEvent;
-import org.talend.cqrs.poc.preparation.command.steps.StepAddedEvent;
-import org.talend.cqrs.poc.preparation.command.update.PreparationUpdatedEvent;
+import org.talend.cqrs.poc.preparation.command.create.PreparationUpdatedEvent;
 
 /**
  * listen to all Preparation events and store/update the model in the local DB tuned to the query API.

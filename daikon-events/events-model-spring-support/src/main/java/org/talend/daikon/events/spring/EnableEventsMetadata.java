@@ -21,6 +21,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import({DefaultProvidersConfiguration.class, EventMetadataFactoryConfiguration.class})
+@Import({ DefaultProvidersConfiguration.class, EventMetadataFactoryConfiguration.class })
 public @interface EnableEventsMetadata {
 }

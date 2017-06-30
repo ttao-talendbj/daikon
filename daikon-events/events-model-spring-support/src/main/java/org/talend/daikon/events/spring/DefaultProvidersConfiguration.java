@@ -68,6 +68,7 @@ public class DefaultProvidersConfiguration {
     @ConditionalOnMissingBean(UserProvider.class)
     public UserProvider defaultUserProvider() {
         return new UserProvider() {
+
             @Override
             public String getUserId() {
                 return defaultUserId;
@@ -79,6 +80,7 @@ public class DefaultProvidersConfiguration {
     @ConditionalOnMissingBean(AccountIdProvider.class)
     public AccountIdProvider defaultAccountIdProvider() {
         return new AccountIdProvider() {
+
             @Override
             public String getAccountId() {
                 return defaultAccountId;

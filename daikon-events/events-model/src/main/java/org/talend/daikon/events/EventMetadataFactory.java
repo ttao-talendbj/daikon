@@ -27,7 +27,7 @@ public class EventMetadataFactory {
     private final AccountIdProvider accountIdProvider;
 
     public EventMetadataFactory(EventIdGenerator eventIdGenerator, ServiceInfoProvider serviceInfoProvider,
-                                TimestampProvider timestampProvider, UserProvider userProvider, AccountIdProvider accountIdProvider) {
+            TimestampProvider timestampProvider, UserProvider userProvider, AccountIdProvider accountIdProvider) {
         this.eventIdGenerator = eventIdGenerator;
         this.serviceInfoProvider = serviceInfoProvider;
         this.timestampProvider = timestampProvider;
@@ -41,9 +41,7 @@ public class EventMetadataFactory {
                 .setTimestamp(timestampProvider.getCurrentTimestamp())
                 .setIssuer(new EventIssuer(serviceInfoProvider.getServiceName(), serviceInfoProvider.getServiceVersion()))
                 .setAccountId(accountIdProvider.getAccountId()).setUserId(userProvider.getUserId())
-                .setRequestId(requestContext.getRequestId()).setTransactionId(requestContext.getTransactionId())
-                .setRequestDetails(createRequestDetails(requestContext))
-                .build();
+                .setCorrelationId(requestContext.getRequestId()).setRequestDetails(createRequestDetails(requestContext)).build();
     }
 
     private RequestDetails createRequestDetails(RequestContext requestContext) {
