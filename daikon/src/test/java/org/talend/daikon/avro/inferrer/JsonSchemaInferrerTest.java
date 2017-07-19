@@ -12,7 +12,10 @@
 // ============================================================================
 package org.talend.daikon.avro.inferrer;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,6 +43,10 @@ public class JsonSchemaInferrerTest {
 
     private final String doubleJson = "{\"a\": 100.1}";
 
+    private final String simpleBooleanJson = "{\"a\": {\"b\": false}, \"d\": true}";
+
+    private final String arrayBooleanJson = "{\"a\": [{\"b\": true}, {\"b\": false}]}";
+
     /**
      * Test {@link JsonSchemaInferrer#getFields(JsonNode)}
      *
@@ -55,20 +62,20 @@ public class JsonSchemaInferrerTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(simpleJson);
 
-        List<Schema.Field> fields = jsonSchemaInferrer.getFields(jsonNode);
-        assertEquals(2, fields.size());
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(2));
 
         // Check `a` field
-        Schema.Field fieldA = fields.get(0);
+        Schema.Field fieldA = fieldList.get(0);
 
         // "name":"a"
-        assertEquals("a", fieldA.name());
+        assertThat(fieldA.name(), is(equalTo("a")));
 
         // Check `a` field type content
         // "type":{"type":"record","fields":[{"name":"b","type":["string","null"]}]}
 
         // "type":"record"
-        assertEquals("record", fieldA.schema().getType().getName());
+        assertThat(fieldA.schema().getType().getName(), is(equalTo("record")));
 
         // "fields":[{"name":"b","type":["null","string"]}]
         List<Schema.Field> fieldATypeFields = fieldA.schema().getFields();
@@ -77,29 +84,29 @@ public class JsonSchemaInferrerTest {
         Schema.Field fieldB = fieldATypeFields.get(0);
 
         // "name":"b"
-        assertEquals("b", fieldB.name());
+        assertThat(fieldB.name(), is(equalTo("b")));
 
         // Check `b` field type content
         // "type":["string","null"]
         Schema.Type fieldBType = fieldB.schema().getType();
-        assertEquals("union", fieldBType.getName());
+        assertThat(fieldBType.getName(), is(equalTo("union")));
         List<Schema> fieldSchemaBTypeItems = fieldB.schema().getTypes();
-        assertEquals("string", fieldSchemaBTypeItems.get(0).getName());
-        assertEquals("null", fieldSchemaBTypeItems.get(1).getName());
+        assertThat(fieldSchemaBTypeItems.get(0).getName(), is(equalTo("string")));
+        assertThat(fieldSchemaBTypeItems.get(1).getName(), is(equalTo("null")));
 
         // Check `d` field
-        Schema.Field fieldD = fields.get(1);
+        Schema.Field fieldD = fieldList.get(1);
 
         // "name":"d"
-        assertEquals("d", fieldD.name());
+        assertThat(fieldD.name(), is(equalTo("d")));
 
         // Check `d` field type content
         // "type":["string","null"]
         Schema.Type fieldDType = fieldD.schema().getType();
-        assertEquals("union", fieldDType.getName());
+        assertThat(fieldDType.getName(), is(equalTo("union")));
         List<Schema> fieldSchemaDTypeItems = fieldD.schema().getTypes();
-        assertEquals("string", fieldSchemaDTypeItems.get(0).getName());
-        assertEquals("null", fieldSchemaDTypeItems.get(1).getName());
+        assertThat(fieldSchemaDTypeItems.get(0).getName(), is(equalTo("string")));
+        assertThat(fieldSchemaDTypeItems.get(1).getName(), is(equalTo("null")));
     }
 
     /**
@@ -117,20 +124,20 @@ public class JsonSchemaInferrerTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(arrayJson);
 
-        List<Schema.Field> fields = jsonSchemaInferrer.getFields(jsonNode);
-        assertEquals(1, fields.size());
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(1));
 
         // Check `a` field
-        Schema.Field fieldA = fields.get(0);
+        Schema.Field fieldA = fieldList.get(0);
 
         // "name":"a"
-        assertEquals("a", fieldA.name());
+        assertThat(fieldA.name(), is(equalTo("a")));
 
         // Check `a` field type content
         // "type":{"type":"array","items":{"type":"record","fields":[{"name":"b","type":["string","null"]}]}}
 
         // "type":"array"
-        assertEquals("array", fieldA.schema().getType().getName());
+        assertThat(fieldA.schema().getType().getName(), is(equalTo("array")));
 
         List<Schema.Field> fieldAArray = fieldA.schema().getElementType().getFields();
 
@@ -138,15 +145,15 @@ public class JsonSchemaInferrerTest {
         Schema.Field fieldB = fieldAArray.get(0);
 
         // "name":"b"
-        assertEquals("b", fieldB.name());
+        assertThat(fieldB.name(), is(equalTo("b")));
 
         // Check `b` field type content
         // "type":["string","null"]
         Schema.Type fieldBType = fieldB.schema().getType();
-        assertEquals("union", fieldBType.getName());
+        assertThat(fieldBType.getName(), is(equalTo("union")));
         List<Schema> fieldSchemaBTypeItems = fieldB.schema().getTypes();
-        assertEquals("string", fieldSchemaBTypeItems.get(0).getName());
-        assertEquals("null", fieldSchemaBTypeItems.get(1).getName());
+        assertThat(fieldSchemaBTypeItems.get(0).getName(), is(equalTo("string")));
+        assertThat(fieldSchemaBTypeItems.get(1).getName(), is(equalTo("null")));
     }
 
     /**
@@ -164,22 +171,22 @@ public class JsonSchemaInferrerTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(nullJson);
 
-        List<Schema.Field> fields = jsonSchemaInferrer.getFields(jsonNode);
-        assertEquals(1, fields.size());
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(1));
 
         // Check `a` field
-        Schema.Field fieldA = fields.get(0);
+        Schema.Field fieldA = fieldList.get(0);
 
         // "name":"a"
-        assertEquals("a", fieldA.name());
+        assertThat(fieldA.name(), is(equalTo("a")));
 
         // Check `a` field type content
         // "type":["string","null"]
         Schema.Type fieldAType = fieldA.schema().getType();
-        assertEquals("union", fieldAType.getName());
+        assertThat(fieldAType.getName(), is(equalTo("union")));
         List<Schema> fieldSchemaATypeItems = fieldA.schema().getTypes();
-        assertEquals("string", fieldSchemaATypeItems.get(0).getName());
-        assertEquals("null", fieldSchemaATypeItems.get(1).getName());
+        assertThat(fieldSchemaATypeItems.get(0).getName(), is(equalTo("string")));
+        assertThat(fieldSchemaATypeItems.get(1).getName(), is(equalTo("null")));
     }
 
     /**
@@ -197,22 +204,22 @@ public class JsonSchemaInferrerTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(intJson);
 
-        List<Schema.Field> fields = jsonSchemaInferrer.getFields(jsonNode);
-        assertEquals(1, fields.size());
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(1));
 
         // Check `a` field
-        Schema.Field fieldA = fields.get(0);
+        Schema.Field fieldA = fieldList.get(0);
 
         // "name":"a"
-        assertEquals("a", fieldA.name());
+        assertThat(fieldA.name(), is(equalTo("a")));
 
         // Check `a` field type content
         // "type":["int","null"]
         Schema.Type fieldAType = fieldA.schema().getType();
-        assertEquals("union", fieldAType.getName());
+        assertThat(fieldAType.getName(), is(equalTo("union")));
         List<Schema> fieldSchemaATypeItems = fieldA.schema().getTypes();
-        assertEquals("int", fieldSchemaATypeItems.get(0).getName());
-        assertEquals("null", fieldSchemaATypeItems.get(1).getName());
+        assertThat(fieldSchemaATypeItems.get(0).getName(), is(equalTo("int")));
+        assertThat(fieldSchemaATypeItems.get(1).getName(), is(equalTo("null")));
     }
 
     /**
@@ -230,22 +237,131 @@ public class JsonSchemaInferrerTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(doubleJson);
 
-        List<Schema.Field> fields = jsonSchemaInferrer.getFields(jsonNode);
-        assertEquals(1, fields.size());
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(1));
 
         // Check `a` field
-        Schema.Field fieldA = fields.get(0);
+        Schema.Field fieldA = fieldList.get(0);
 
         // "name":"a"
-        assertEquals("a", fieldA.name());
+        assertThat(fieldA.name(), is(equalTo("a")));
 
         // Check `a` field type content
         // "type":["double","null"]
         Schema.Type fieldAType = fieldA.schema().getType();
-        assertEquals("union", fieldAType.getName());
+        assertThat(fieldAType.getName(), is(equalTo("union")));
         List<Schema> fieldSchemaATypeItems = fieldA.schema().getTypes();
-        assertEquals("double", fieldSchemaATypeItems.get(0).getName());
-        assertEquals("null", fieldSchemaATypeItems.get(1).getName());
+        assertThat(fieldSchemaATypeItems.get(0).getName(), is(equalTo("double")));
+        assertThat(fieldSchemaATypeItems.get(1).getName(), is(equalTo("null")));
+    }
+
+    /**
+     * Test {@link JsonSchemaInferrer#getFields(JsonNode)}
+     *
+     * Get fields of the input record: {@link JsonSchemaInferrerTest#simpleBooleanJson}
+     *
+     * Expected fields:
+     * [{"name":"a","type":{"type":"record","fields":[{"name":"b","type":["boolean","null"]}]}},{"name":"d","type":["boolean","null"]}]
+     *
+     * @throws IOException
+     */
+    @Test
+    public void testGetFieldsSimpleBooleanJson() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(simpleBooleanJson);
+
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(2));
+
+        // Check `a` field
+        Schema.Field fieldA = fieldList.get(0);
+
+        // "name":"a"
+        assertThat(fieldA.name(), is(equalTo("a")));
+
+        // Check `a` field type content
+        // "type":{"type":"record","fields":[{"name":"b","type":["boolean","null"]}]}
+
+        // "type":"record"
+        assertThat(fieldA.schema().getType().getName(), is(equalTo("record")));
+
+        // "fields":[{"name":"b","type":["boolean","null"]}]
+        List<Schema.Field> fieldATypeFields = fieldA.schema().getFields();
+
+        // Check `b` field
+        Schema.Field fieldB = fieldATypeFields.get(0);
+
+        // "name":"b"
+        assertThat(fieldB.name(), is(equalTo("b")));
+
+        // Check `b` field type content
+        // "type":["string","null"]
+        Schema.Type fieldBType = fieldB.schema().getType();
+        assertThat(fieldBType.getName(), is(equalTo("union")));
+        List<Schema> fieldSchemaBTypeItems = fieldB.schema().getTypes();
+        assertThat(fieldSchemaBTypeItems.get(0).getName(), is(equalTo("boolean")));
+        assertThat(fieldSchemaBTypeItems.get(1).getName(), is(equalTo("null")));
+
+        // Check `d` field
+        Schema.Field fieldD = fieldList.get(1);
+
+        // "name":"d"
+        assertThat(fieldD.name(), is(equalTo("d")));
+
+        // Check `d` field type content
+        // "type":["boolean","null"]
+        Schema.Type fieldDType = fieldD.schema().getType();
+        assertThat(fieldDType.getName(), is(equalTo("union")));
+        List<Schema> fieldSchemaDTypeItems = fieldD.schema().getTypes();
+        assertThat(fieldSchemaDTypeItems.get(0).getName(), is(equalTo("boolean")));
+        assertThat(fieldSchemaDTypeItems.get(1).getName(), is(equalTo("null")));
+    }
+
+    /**
+     * Test {@link JsonSchemaInferrer#getFields(JsonNode)}
+     *
+     * Get fields of the input record: {@link JsonSchemaInferrerTest#arrayBooleanJson}
+     *
+     * Expected fields:
+     * [{"name":"a","type":{"type":"array","items":{"type":"record","fields":[{"name":"b","type":["boolean","null"]}]}}}]
+     *
+     * @throws IOException
+     */
+    @Test
+    public void testGetFieldsArrayBooleanJson() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(arrayBooleanJson);
+
+        List<Schema.Field> fieldList = jsonSchemaInferrer.getFields(jsonNode);
+        assertThat(fieldList, hasSize(1));
+
+        // Check `a` field
+        Schema.Field fieldA = fieldList.get(0);
+
+        // "name":"a"
+        assertThat(fieldA.name(), is(equalTo("a")));
+
+        // Check `a` field type content
+        // "type":{"type":"array","items":{"type":"record","fields":[{"name":"b","type":["boolean","null"]}]}}
+
+        // "type":"array"
+        assertThat(fieldA.schema().getType().getName(), is(equalTo("array")));
+
+        List<Schema.Field> fieldAArray = fieldA.schema().getElementType().getFields();
+
+        // Check `b` field
+        Schema.Field fieldB = fieldAArray.get(0);
+
+        // "name":"b"
+        assertThat(fieldB.name(), is(equalTo("b")));
+
+        // Check `b` field type content
+        // "type":["boolean","null"]
+        Schema.Type fieldBType = fieldB.schema().getType();
+        assertThat(fieldBType.getName(), is(equalTo("union")));
+        List<Schema> fieldSchemaBTypeItems = fieldB.schema().getTypes();
+        assertThat(fieldSchemaBTypeItems.get(0).getName(), is(equalTo("boolean")));
+        assertThat(fieldSchemaBTypeItems.get(1).getName(), is(equalTo("null")));
     }
 
     /**
@@ -264,30 +380,30 @@ public class JsonSchemaInferrerTest {
     public void testInferSchema() throws IOException {
 
         Schema schema = jsonSchemaInferrer.inferSchema(simpleJson);
-        List<Schema.Field> fields = schema.getFields();
-        assertEquals(2, fields.size());
+        List<Schema.Field> fieldList = schema.getFields();
+        assertThat(fieldList, hasSize(2));
 
         // Get `a` field schema and check its type
-        Schema.Field fieldA = fields.get(0);
+        Schema.Field fieldA = fieldList.get(0);
         Schema schemaA = fieldA.schema();
-        assertEquals("record", schemaA.getType().getName());
+        assertThat(schemaA.getType().getName(), is(equalTo("record")));
 
         List<Schema.Field> fieldsA = schemaA.getFields();
 
         // Check `b` field schema
         Schema.Field fieldB = fieldsA.get(0);
         Schema schemaB = fieldB.schema();
-        assertEquals("union", schemaB.getType().getName());
+        assertThat(schemaB.getType().getName(), is(equalTo("union")));
         List<Schema> typesB = schemaB.getTypes();
-        assertEquals("string", typesB.get(0).getName());
-        assertEquals("null", typesB.get(1).getName());
+        assertThat(typesB.get(0).getName(), is(equalTo("string")));
+        assertThat(typesB.get(1).getName(), is(equalTo("null")));
 
         // Check `d` field schema
-        Schema.Field fieldD = fields.get(1);
+        Schema.Field fieldD = fieldList.get(1);
         Schema schemaD = fieldD.schema();
-        assertEquals("union", schemaD.getType().getName());
+        assertThat(schemaD.getType().getName(), is(equalTo("union")));
         List<Schema> typesD = schemaD.getTypes();
-        assertEquals("string", typesD.get(0).getName());
-        assertEquals("null", typesD.get(1).getName());
+        assertThat(typesD.get(0).getName(), is(equalTo("string")));
+        assertThat(typesD.get(1).getName(), is(equalTo("null")));
     }
 }

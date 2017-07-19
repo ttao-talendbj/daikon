@@ -82,9 +82,9 @@ public class JsonSchemaInferrer implements SchemaInferrer<String> {
     }
 
     /**
-     * Get the fields schema from json node. Supported data types are: INT, LONG, DOUBLE, STRING, ARRAY, OBJECT.
+     * Get the fields schema from json node. Supported data types are: INT, BOOLEAN, LONG, DOUBLE, STRING, ARRAY, OBJECT.
      *
-     * A primitive field may be either a null or string|int|long|double.
+     * A primitive field may be either a null or string|int|boolean|long|double.
      *
      * Example:
      *
@@ -124,6 +124,12 @@ public class JsonSchemaInferrer implements SchemaInferrer<String> {
 
                 case STRING:
                     field = new Schema.Field(mapEntry.getKey(), AvroUtils.wrapAsNullable(AvroUtils._string()), null, null,
+                            Schema.Field.Order.ASCENDING);
+                    fields.add(field);
+                    break;
+
+                case BOOLEAN:
+                    field = new Schema.Field(mapEntry.getKey(), AvroUtils.wrapAsNullable(AvroUtils._boolean()), null, null,
                             Schema.Field.Order.ASCENDING);
                     fields.add(field);
                     break;

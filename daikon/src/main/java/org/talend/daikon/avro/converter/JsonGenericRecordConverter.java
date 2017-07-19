@@ -27,6 +27,7 @@ import org.talend.daikon.exception.TalendRuntimeException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
@@ -115,15 +116,7 @@ public class JsonGenericRecordConverter implements AvroConverter<String, Generic
 
             if (!(nextNode instanceof NullNode)) {
                 if (nextNode instanceof ValueNode) {
-                    if (nextNode instanceof TextNode) {
-                        outputRecord.set(mapEntry.getKey(), nextNode.textValue());
-                    } else if (nextNode instanceof IntNode) {
-                        outputRecord.set(mapEntry.getKey(), nextNode.intValue());
-                    } else if (nextNode instanceof LongNode) {
-                        outputRecord.set(mapEntry.getKey(), nextNode.longValue());
-                    } else if (nextNode instanceof DoubleNode) {
-                        outputRecord.set(mapEntry.getKey(), nextNode.doubleValue());
-                    }
+                    outputRecord.set(mapEntry.getKey(), getValue(nextNode));
                 } else if (nextNode instanceof ObjectNode) {
                     Schema schemaTo = jsonSchemaInferrer.inferSchema(nextNode.toString());
                     GenericRecord record = getOutputRecord(nextNode, schemaTo);
@@ -134,15 +127,7 @@ public class JsonGenericRecordConverter implements AvroConverter<String, Generic
                     while (elementsIterator.hasNext()) {
                         JsonNode nodeTo = elementsIterator.next();
                         if (nodeTo instanceof ValueNode) {
-                            if (nodeTo instanceof TextNode) {
-                                listRecords.add(nodeTo.textValue());
-                            } else if (nodeTo instanceof IntNode) {
-                                listRecords.add(nodeTo.intValue());
-                            } else if (nodeTo instanceof LongNode) {
-                                listRecords.add(nodeTo.longValue());
-                            } else if (nodeTo instanceof DoubleNode) {
-                                listRecords.add(nodeTo.doubleValue());
-                            }
+                            listRecords.add(getValue(nodeTo));
                         } else {
                             Schema schemaTo = jsonSchemaInferrer.inferSchema(nodeTo.toString());
                             listRecords.add(getOutputRecord(nodeTo, schemaTo));
@@ -155,5 +140,26 @@ public class JsonGenericRecordConverter implements AvroConverter<String, Generic
             }
         }
         return outputRecord.build();
+    }
+
+    /**
+     * Get value from Json Node.
+     * 
+     * @param node
+     * @return value from Json Node
+     */
+    private Object getValue(JsonNode node) {
+        if (node instanceof TextNode) {
+            return node.textValue();
+        } else if (node instanceof IntNode) {
+            return node.intValue();
+        } else if (node instanceof LongNode) {
+            return node.longValue();
+        } else if (node instanceof DoubleNode) {
+            return node.doubleValue();
+        } else if (node instanceof BooleanNode) {
+            return node.booleanValue();
+        }
+        return null;
     }
 }
