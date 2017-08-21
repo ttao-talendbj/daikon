@@ -7,6 +7,7 @@ import static org.talend.daikon.properties.presentation.Widget.widget;
 
 import org.junit.Test;
 import org.talend.daikon.properties.PropertiesImpl;
+import org.talend.daikon.properties.PropertiesList;
 import org.talend.daikon.properties.ReferenceExampleProperties;
 import org.talend.daikon.properties.ReferenceExampleProperties.TestAProperties;
 import org.talend.daikon.properties.presentation.Form;
@@ -57,6 +58,19 @@ public class UiSchemaGeneratorTest extends AbstractSchemaGenerator {
         assertEquals("\"code\"", scalaCodeUiSchemaJsonObj.get("ui:widget").toString());
         assertEquals("{\"" + Widget.CODE_SYNTAX_WIDGET_CONF + "\":\"scala\"}",
                 scalaCodeUiSchemaJsonObj.get("ui:options").toString());
+    }
+
+    @Test
+    public void checkFilterRowProperties() throws Exception {
+        FilterRowProperties properties = new FilterRowProperties("filterRowProperties");
+        properties.init();
+        UiSchemaGenerator generator = new UiSchemaGenerator();
+        ObjectNode uiSchemaJsonObj = generator.genWidget(properties, "filterRowForm");
+
+        ObjectNode filterRowSchemaJsonObj = (ObjectNode) uiSchemaJsonObj.get("nested");
+        assertEquals("{\"type\":\"filter\"}", filterRowSchemaJsonObj.get("ui:options").toString());
+        filterRowSchemaJsonObj = (ObjectNode) uiSchemaJsonObj.get("datalistProperty");
+        assertEquals("\"datalist\"", filterRowSchemaJsonObj.get("ui:widget").toString());
     }
 
     @Test
@@ -176,4 +190,52 @@ public class UiSchemaGeneratorTest extends AbstractSchemaGenerator {
             form.addRow(widget(scalaCode).setWidgetType(Widget.CODE_WIDGET_TYPE).setConfigurationValue("language", "scala"));
         }
     }
+
+    private class FilterRowProperties extends PropertiesImpl {
+
+        private static final long serialVersionUID = 1L;
+
+        public final Property<String> datalistProperty = PropertyFactory.newString("datalistProperty");
+
+        // nested properties
+        public PropertiesList<FilterRowCriteriaProperties> nested = new PropertiesList<>("nested",
+                new PropertiesList.NestedPropertiesFactory<FilterRowCriteriaProperties>() {
+
+                    @Override
+                    public FilterRowCriteriaProperties createAndInit(String name) {
+                        return (FilterRowCriteriaProperties) new FilterRowCriteriaProperties(name).init();
+                    }
+
+                });
+
+        public FilterRowProperties(String name) {
+            super(name);
+        }
+
+        @Override
+        public void setupLayout() {
+            super.setupLayout();
+            Form form = new Form(this, "filterRowForm");
+            form.addRow(widget(datalistProperty).setWidgetType(Widget.DATALIST_WIDGET_TYPE));
+            form.addRow(widget(nested).setWidgetType(Widget.NESTED_PROPERTIES).setConfigurationValue("type", "filter"));
+        }
+    }
+
+    private class FilterRowCriteriaProperties extends PropertiesImpl {
+
+        public final Property<String> criteriaProperty = PropertyFactory.newString("criteriaProperty");
+
+        public FilterRowCriteriaProperties(String name) {
+            super(name);
+        }
+
+        @Override
+        public void setupLayout() {
+            super.setupLayout();
+            Form form = new Form(this, Form.MAIN);
+            form.addRow(widget(criteriaProperty).setWidgetType(Widget.DATALIST_WIDGET_TYPE));
+        }
+
+    }
+
 }
