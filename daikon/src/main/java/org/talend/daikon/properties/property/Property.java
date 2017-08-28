@@ -13,7 +13,13 @@
 package org.talend.daikon.properties.property;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.reflect.TypeLiteral;
@@ -51,6 +57,8 @@ public class Property<T> extends SimpleNamedThing implements AnyProperty {
     protected EnumSet<Flags> flags;
 
     protected Object storedValue;
+
+    protected Object storedDefaultValue;
 
     protected transient PropertyValueEvaluator propertyValueEvaluator;
 
@@ -303,7 +311,7 @@ public class Property<T> extends SimpleNamedThing implements AnyProperty {
     }
 
     /**
-     * Get the actual value of the property, resolving the stored value if requried.
+     * Get the actual value of the property, resolving the stored value if required.
      *
      * @return the value of the property. This value may not be the one Stored with setValue(), it may be evaluated with
      * {@link PropertyValueEvaluator}.
@@ -319,12 +327,36 @@ public class Property<T> extends SimpleNamedThing implements AnyProperty {
     }
 
     /**
+     * Get the default value of the property, resolving the stored value if required.
+     *
+     * @return the value of the property. This value may not be the one Stored with setValue(), it may be evaluated with
+     * {@link PropertyValueEvaluator}.
+     * @exception ClassCastException is the stored value is not of the property type and no {@code PropertyValueEvaluator} has
+     * been set.
+     */
+    @SuppressWarnings("unchecked")
+    public T getDefaultValue() {
+        if (propertyValueEvaluator != null) {
+            return propertyValueEvaluator.evaluate(this, storedDefaultValue);
+        } // else not evaluator so return the storedValue
+        return (T) storedDefaultValue;
+    }
+
+    /**
      * Set the stored value for this property.
      *
      * @see #setStoredValue(Object)
      */
     public Property<T> setValue(T value) {
         storedValue = value;
+        return this;
+    }
+
+    /**
+     * Set the default stored value for this property.
+     */
+    protected Property<T> setDefaultValue(T value) {
+        storedDefaultValue = value;
         return this;
     }
 
@@ -338,6 +370,17 @@ public class Property<T> extends SimpleNamedThing implements AnyProperty {
             return String.valueOf(value);
         }
         return null;
+    }
+
+    /**
+     * Cast the default value to a string
+     */
+    public String getStringDefaultValue() {
+        if (getDefaultValue() == null) {
+            return null;
+        } else {
+            return String.valueOf(getDefaultValue());
+        }
     }
 
     @Override
@@ -500,5 +543,4 @@ public class Property<T> extends SimpleNamedThing implements AnyProperty {
         HIDDEN
 
     }
-
 }

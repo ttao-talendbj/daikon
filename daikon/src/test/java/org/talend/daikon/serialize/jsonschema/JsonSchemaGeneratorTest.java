@@ -1,6 +1,7 @@
 package org.talend.daikon.serialize.jsonschema;
 
 import static org.junit.Assert.assertEquals;
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 import org.json.JSONException;
 import org.junit.Rule;
@@ -13,8 +14,6 @@ import org.talend.daikon.properties.property.PropertyFactory;
 import org.talend.daikon.properties.property.StringProperty;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
 import org.talend.daikon.serialize.FullExampleProperties;
-
-import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

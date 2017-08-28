@@ -67,6 +67,8 @@ public class JsonSchemaGenerator {
     }
 
     private void computeSchemaType(Properties cProperties, String formName, boolean visible, ObjectNode schema) {
+
+        // Handle PropertiesList type
         if (cProperties instanceof PropertiesList<?>) {
             schema.put(JsonSchemaConstants.TAG_MIN_ITEMS, ((PropertiesList<?>) cProperties).getMinItems());
             schema.put(JsonSchemaConstants.TAG_MAX_ITEMS, ((PropertiesList<?>) cProperties).getMaxItems());
@@ -198,6 +200,11 @@ public class JsonSchemaGenerator {
             enumNames = schema.putArray(JsonSchemaConstants.TAG_ENUM_NAMES);
         }
         addEnumsToProperty(enumList, enumNames, property);
+
+        // Set default value if one is stored at the property level
+        if (property.getDefaultValue() != null) {
+            schema.put(JsonSchemaConstants.TAG_DEFAULT, property.getStringDefaultValue());
+        }
     }
 
     private void addEnumsToProperty(ArrayNode enumList, ArrayNode enumNames, Property property) {
