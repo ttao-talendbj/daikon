@@ -48,7 +48,7 @@ public class TranslatableTaggedImplTest {
 
         assertEquals(1, def.getTags().size());
 
-        assertTrue(TagUtils.hasTag(def.getTags().get(0), "common tag"));
+        assertTrue(TagUtils.hasTag(def.getTags().get(0), "dataset tag"));
     }
 
     @Test

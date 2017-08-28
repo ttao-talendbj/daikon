@@ -4,11 +4,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.talend.cqrs.poc.preparation.command.create.PreparationCreateCommand;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.talend.cqrs.poc.preparation.command.create.CreatePreparationCommand;
+import org.talend.cqrs.poc.preparation.command.create.CreatePreparationDto;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddCommand;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdateCommand;
 
@@ -21,11 +20,10 @@ public class PreparationCommandController {
         this.commandGateway = commandGateway;
     }
 
-    @PostMapping
-    public CompletableFuture<String> createPreparation(@RequestParam(name = "name") String name,
-            @RequestParam(name = "desc", defaultValue = "") String desc) {
-        String randomUUID = UUID.randomUUID().toString();
-        return commandGateway.send(new PreparationCreateCommand(randomUUID, name, desc));
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public CompletableFuture<String> createPreparation(@RequestBody CreatePreparationDto dto) {
+        String preparationId = UUID.randomUUID().toString();
+        return commandGateway.send(new CreatePreparationCommand(preparationId, dto));
     }
 
     @PostMapping("/step/{id}")

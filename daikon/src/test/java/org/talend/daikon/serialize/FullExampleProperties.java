@@ -71,7 +71,7 @@ public class FullExampleProperties extends PropertiesImpl {
     public final TableProperties tableProp = new TableProperties("tableProp");
 
     // TODO some Component Reference widget use case.
-    /** reuse common properties */
+    /** reuse dataset properties */
     public final CommonProperties commonProp = new CommonProperties("commonProp");
 
     /** checking {@link WidgetType#FILE} */

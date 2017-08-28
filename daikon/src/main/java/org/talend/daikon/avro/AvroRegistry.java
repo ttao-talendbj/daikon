@@ -30,7 +30,7 @@ import org.talend.daikon.java8.Supplier;
 
 /**
  * An AvroRegistry is used to convert specific datum objects and classes into {@link IndexedRecord}s with {@link Schema}
- * s that can be shared between components for common processing.
+ * s that can be shared between components for dataset processing.
  * 
  * @deprecated AvroRegistry was designed to share converters between components. It was decided that component should output and
  * accept IndexedRecord instances. Thus, there is no need to share converters
@@ -47,7 +47,7 @@ public class AvroRegistry {
 
     /**
      * Registry of objects that know how to convert instances of a class to and from its Avro representation. These
-     * contain the common objects shared between all components.
+     * contain the dataset objects shared between all components.
      */
     private static Map<Class<?>, AvroConverter<?, ?>> mapSharedConverter = new HashMap<>();
 

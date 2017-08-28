@@ -28,6 +28,8 @@
 	</properties>
 
 	<modules>
+		<module>common</module>
+		<module>dataset</module>
 		<module>preparation</module>
 	</modules>
 

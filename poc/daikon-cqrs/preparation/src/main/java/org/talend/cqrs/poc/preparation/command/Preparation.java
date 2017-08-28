@@ -6,11 +6,13 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.util.Assert;
 import org.talend.cqrs.poc.preparation.StepAddedEvent;
-import org.talend.cqrs.poc.preparation.command.create.PreparationCreateCommand;
+import org.talend.cqrs.poc.preparation.command.create.CreatePreparationCommand;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreatedEvent;
 import org.talend.cqrs.poc.preparation.command.create.PreparationUpdatedEvent;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddCommand;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdateCommand;
+import org.talend.cqrs.poc.preparation.dataset.DataSet;
+import org.talend.cqrs.poc.preparation.dataset.DataSetServiceClient;
 import org.talend.daikon.events.EventMetadata;
 import org.talend.daikon.events.EventMetadataFactory;
 
@@ -31,14 +33,25 @@ public class Preparation {
     }
 
     @CommandHandler
-    public Preparation(PreparationCreateCommand preparationCC, EventMetadataFactory eventMetadataFactory) {
+    public Preparation(CreatePreparationCommand preparationCC, EventMetadataFactory eventMetadataFactory, DataSetServiceClient dataSetClient) {
         // check things
-        Assert.hasLength(preparationCC.getName());
+        Assert.hasLength(preparationCC.getName(), "A Preparation name is required");
+        Assert.hasText(preparationCC.getDataSetId(), "A dataSet id is required");
+        DataSet dataset = dataSetClient.findDataSetById(preparationCC.getDataSetId());
+        Assert.notNull(dataset, "DataSet with id " + preparationCC.getDataSetId() + " does not exist");
+
         // event sourcing here. Never change the state of the aggregator in commandhandlers, do so in Event handlers,
         // see @EvenSourcingHandler methods below.
-        EventMetadata eventMetadata = eventMetadataFactory.createEventMetadataBuilder(preparationCC);
-        apply(new PreparationCreatedEvent(eventMetadata, preparationCC.getId(), preparationCC.getName(),
-                preparationCC.getDesc()));
+
+
+        PreparationCreatedEvent event = PreparationCreatedEvent.newBuilder()
+                .setMetadata(eventMetadataFactory.createEventMetadataBuilder(preparationCC))
+                .setId(preparationCC.getId())
+                .setName(preparationCC.getName())
+                .setDesc(preparationCC.getDescription())
+                .build();
+
+        apply(event);
     }
 
     @EventSourcingHandler

@@ -18,7 +18,7 @@ import org.talend.daikon.properties.property.Property;
 import java.io.Serializable;
 
 /**
- * A common interface for the members of a {@link Properties} object.
+ * A dataset interface for the members of a {@link Properties} object.
  *
  * This is implemented by {@link Property} and {@link Properties} and is used to allow the members of the {@code Properties}
  * object to be visited.

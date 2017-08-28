@@ -9,7 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.talend.cqrs.poc.preparation.StepAddedEvent;
 import org.talend.cqrs.poc.preparation.command.Preparation;
-import org.talend.cqrs.poc.preparation.command.create.PreparationCreateCommand;
+import org.talend.cqrs.poc.preparation.command.create.CreatePreparationCommand;
+import org.talend.cqrs.poc.preparation.command.create.CreatePreparationDto;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreatedEvent;
 import org.talend.cqrs.poc.preparation.command.create.PreparationUpdatedEvent;
 import org.talend.cqrs.poc.preparation.command.steps.StepAddCommand;
@@ -39,7 +40,7 @@ public class PreparationCommandTest {
 
     @Test
     public void testPreparationCreatedEvent() {
-        fixture.givenNoPriorActivity().when(new PreparationCreateCommand("123", "my Prep", "desc"))
+        fixture.givenNoPriorActivity().when(new CreatePreparationCommand("123", new CreatePreparationDto("my Prep", "desc", "1234")))
                 .expectEvents(new PreparationCreatedEvent(eventMetadata, "123", "my Prep", "desc"));
     }
 

@@ -5,22 +5,26 @@
   "type" : "record",
   "fields" : [
     {
-      "name" : "entity",
-      "type" : {
-        "name" : "EntityId",
-        "namespace" : "org.talend.daikon.events",
-        "type" : "record",
-        "fields" : [
-          {
-            "name": "type",
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "type": "string"
-          }
-        ]
-      }
+    "name" : "entity",
+    "type" : {
+    "name" : "EntityId",
+    "namespace" : "org.talend.daikon.events",
+    "type" : "record",
+    "fields" : [
+    {
+    "name": "type",
+    "type": "string"
+    },
+    {
+    "name": "id",
+    "type": "string"
+    },
+    {
+    "name": "label",
+    "type": "string"
+    }
+    ]
+    }
     },
     {
       "name": "changeType",

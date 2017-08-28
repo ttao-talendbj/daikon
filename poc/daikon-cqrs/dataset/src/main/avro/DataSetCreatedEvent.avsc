@@ -1,0 +1,23 @@
+{
+  "name" : "DataSetCreatedEvent",
+  "namespace": "org.talend.cqrs.poc.dataset.command.create",
+  "type" : "record",
+  "fields" : [
+    {
+      "name": "metadata",
+      "type": "org.talend.daikon.events.EventMetadata"
+    },
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "desc",
+      "type": "string"
+    }
+  ]
+}
