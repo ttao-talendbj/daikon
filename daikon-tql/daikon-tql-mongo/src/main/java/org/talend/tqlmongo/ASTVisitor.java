@@ -231,11 +231,16 @@ public class ASTVisitor implements IASTVisitor<Object> {
         return c;
     }
 
+    // May be needed in sub-classes.
+    protected boolean isNegation() {
+        return isNegation;
+    }
+
     private String getFieldName(String fieldName) {
         return fieldName;
     }
 
-    private String patternToMongoRegex(String pattern) {
+    protected String patternToMongoRegex(String pattern) {
         StringBuilder sb = new StringBuilder();
         sb.append("^");
         for (int i = 0; i < pattern.length(); i++) {
