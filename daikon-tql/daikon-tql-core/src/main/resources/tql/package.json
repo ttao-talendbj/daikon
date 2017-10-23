@@ -1,6 +1,6 @@
 {
-  "name": "tql",
-  "version": "${project.version}-${buildNumber}",
+  "name": "@talend/tql",
+  "version": "${project.version}",
   "description": "A TQL Parser and Lexer in JavaScript",
   "main": "index.js",
   "scripts": {
