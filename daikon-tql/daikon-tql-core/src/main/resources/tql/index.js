@@ -2,9 +2,16 @@ var TqlLexer = require("./TqlLexer").TqlLexer;
 var TqlParser = require("./TqlParser").TqlParser;
 var TqlListener = require("./TqlParserListener").TqlParserListener;
 
-var antlr4 = require('antlr4/index');
-var parse = (tql, onExactFilter, onContainsFilter, onCompliesFilter,
-             onBetweenFilter, onEmptyFilter, onValidFilter, onInvalidFilter) => {
+var antlr4 = require("antlr4/index");
+var parse = function (
+                        tql,
+                        onExactFilter,
+                        onContainsFilter,
+                        onCompliesFilter,
+                        onBetweenFilter,
+                        onEmptyFilter,
+                        onValidFilter,
+                        onInvalidFilter) {
 
                  var chars = new antlr4.InputStream(tql);
                  var lexer = new TqlLexer(chars);
@@ -15,10 +22,10 @@ var parse = (tql, onExactFilter, onContainsFilter, onCompliesFilter,
 
                  //Define listeners
                  var noop = () => {};
-                 var listener = new TqlParserListener();
+                 var listener = new TqlListener();
                  listener.enterLiteralComparison = (ctx) => {
                      switch (ctx.children[1].getText()) {
-                     case '=':
+                     case "=":
                          onExactFilter ? onExactFilter(ctx) : noop();
                          break;
                      default:
@@ -34,6 +41,6 @@ var parse = (tql, onExactFilter, onContainsFilter, onCompliesFilter,
 
                  //Bind listeners to tree
                  antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
-             }
+             };
 
 export { TqlLexer, TqlParser, TqlListener, parse };
