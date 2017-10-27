@@ -4,12 +4,6 @@ var TqlListener = require("./TqlParserListener").TqlParserListener;
 
 var antlr4 = require("antlr4/index");
 
-function onLiteralComparisonFilter(ctx) {
-    if (ctx.children[1].getText() === '=' && onExactFilter) {
-        onExactFilter(ctx);
-    }
-}
-
 var parse = function(
     tql,
     onExactFilter,
@@ -36,13 +30,14 @@ var parse = function(
     listener.enterFieldContains = onContainsFilter || noop;
     listener.enterFieldCompliesPattern = onCompliesFilter || noop;
     listener.enterFieldBetween = onBetweenFilter || noop;
-    listener.enterLiteralComparison = onLiteralComparisonFilter;
+    listener.enterLiteralComparison = function(ctx) {
+        if (ctx.children[1].getText() === "=" && onExactFilter) {
+            onExactFilter(ctx);
+        }
+    };
 
     // Bind listeners to tree
-    antlr4.tree.ParseTreeWalker.DEFAULT.walk(
-        listener,
-        parser.expression()
-    );
+    antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, parser.expression());
 };
 
 export { TqlLexer, TqlParser, TqlListener, parse };
