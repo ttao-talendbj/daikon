@@ -3,43 +3,46 @@ var TqlParser = require("./TqlParser").TqlParser;
 var TqlListener = require("./TqlParserListener").TqlParserListener;
 
 var antlr4 = require("antlr4/index");
-var parse = function(tql,
-                     onExactFilter,
-                     onContainsFilter,
-                     onCompliesFilter,
-                     onBetweenFilter,
-                     onEmptyFilter,
-                     onValidFilter,
-                     onInvalidFilter) {
 
-                         var chars = new antlr4.InputStream(tql);
-                         var lexer = new TqlLexer(chars);
-                         var tokens  = new antlr4.CommonTokenStream(lexer);
-                         var parser = new TqlParser(tokens);
-                         parser.buildParseTrees = true;
-                         var tree = parser.expression();
+function onLiteralComparisonFilter(ctx) {
+    if (ctx.children[1].getText() === '=' && onExactFilter) {
+        onExactFilter(ctx);
+    }
+}
 
-                         //Define listeners
-                         var noop = function() {};
-                         var listener = new TqlListener();
-                         listener.enterLiteralComparison = function(ctx) {
-                             switch (ctx.children[1].getText()) {
-                             case "=":
-                                 onExactFilter ? onExactFilter(ctx) : noop();
-                                 break;
-                             default:
-                                 return noop();
-                             }
-                         };
-                         listener.enterFieldIsEmpty = onEmptyFilter || noop;
-                         listener.enterFieldIsValid = onValidFilter || noop;
-                         listener.enterFieldIsInvalid = onInvalidFilter || noop;
-                         listener.enterFieldContains = onContainsFilter || noop;
-                         listener.enterFieldCompliesPattern = onCompliesFilter || noop;
-                         listener.enterFieldBetween = onBetweenFilter || noop;
+var parse = function(
+    tql,
+    onExactFilter,
+    onContainsFilter,
+    onCompliesFilter,
+    onBetweenFilter,
+    onEmptyFilter,
+    onValidFilter,
+    onInvalidFilter
+) {
+    var chars = new antlr4.InputStream(tql);
+    var lexer = new TqlLexer(chars);
+    var tokens = new antlr4.CommonTokenStream(lexer);
+    var listener = new TqlListener();
+    var parser = new TqlParser(tokens);
+    var noop = function() {};
 
-                         //Bind listeners to tree
-                         antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
-                     };
+    parser.buildParseTrees = true;
+
+    // Define listeners
+    listener.enterFieldIsEmpty = onEmptyFilter || noop;
+    listener.enterFieldIsValid = onValidFilter || noop;
+    listener.enterFieldIsInvalid = onInvalidFilter || noop;
+    listener.enterFieldContains = onContainsFilter || noop;
+    listener.enterFieldCompliesPattern = onCompliesFilter || noop;
+    listener.enterFieldBetween = onBetweenFilter || noop;
+    listener.enterLiteralComparison = onLiteralComparisonFilter;
+
+    // Bind listeners to tree
+    antlr4.tree.ParseTreeWalker.DEFAULT.walk(
+        listener,
+        parser.expression()
+    );
+};
 
 export { TqlLexer, TqlParser, TqlListener, parse };
