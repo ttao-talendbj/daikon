@@ -32,7 +32,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/generated-modules/</outputDirectory>
+                            <outputDirectory>${project.build.directory}/generated-modules/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/resources</directory>
@@ -54,7 +54,7 @@
                             <goal>antlr4</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/generated-sources/antlr/org/talend/tql</outputDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources/antlr/org/talend/tql</outputDirectory>
                             <visitor>true</visitor>
                             <treatWarningsAsErrors>true</treatWarningsAsErrors>
                             <arguments>
@@ -70,7 +70,7 @@
                         </goals>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <outputDirectory>${basedir}/target/generated-modules/tql</outputDirectory>
+                            <outputDirectory>${project.build.directory}/generated-modules/tql</outputDirectory>
                             <visitor>true</visitor>
                             <treatWarningsAsErrors>true</treatWarningsAsErrors>
                             <options>
@@ -113,7 +113,7 @@
                                 </goals>
                                 <phase>deploy</phase>
                                 <configuration>
-                                    <arguments>publish ${basedir}/target/generated-modules/tql</arguments>
+                                    <arguments>publish ${project.build.directory}/generated-modules/tql --access public --tag latest</arguments>
                                 </configuration>
                             </execution>
                         </executions>
