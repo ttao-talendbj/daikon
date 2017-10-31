@@ -34,6 +34,7 @@ MATCHES : '~';
 COMPLIES : 'complies';
 BETWEEN : 'between';
 IN : 'in';
+ALL_FIELDS: '*';
 FIELD_REFERENCE: 'field';
 
 // special values
