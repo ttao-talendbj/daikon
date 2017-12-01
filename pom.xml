@@ -34,7 +34,7 @@
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
-      <tag>HEAD</tag>
+      <tag>maintenance/0.19</tag>
   </scm>
     <repositories>
         <repository>

@@ -118,4 +118,8 @@
 
 		</plugins>
 	</build>
+
+  <scm>
+    <tag>maintenance/0.19</tag>
+  </scm>
 </project>
