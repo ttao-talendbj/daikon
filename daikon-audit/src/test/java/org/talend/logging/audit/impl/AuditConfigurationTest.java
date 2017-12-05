@@ -3,6 +3,7 @@ package org.talend.logging.audit.impl;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.*;
@@ -38,6 +39,9 @@ public class AuditConfigurationTest {
 
     @Test
     public void testLoadConfiguration() {
+        System.setProperty("test.file.path.property", "/tmp/testSysPropValue");
+        final String javaHome = System.getenv("JAVA_HOME");
+
         AuditConfiguration.loadFromClasspath("/test.audit.properties");
 
         for (AuditConfiguration c : AuditConfiguration.values()) {
@@ -46,11 +50,13 @@ public class AuditConfigurationTest {
             }
         }
 
+        final LogAppendersSet expectedAppenders = new LogAppendersSet(Arrays.asList(LogAppenders.FILE, LogAppenders.SOCKET));
+
         assertEquals("testLogger", AuditConfiguration.ROOT_LOGGER.getString());
         assertEquals("TestApplicationName", AuditConfiguration.APPLICATION_NAME.getString());
-        assertEquals("TestServiceName", AuditConfiguration.SERVICE_NAME.getString());
-        assertEquals("TestInstanceName", AuditConfiguration.INSTANCE_NAME.getString());
-        assertEquals("test.json", AuditConfiguration.APPENDER_FILE_PATH.getString());
+        assertEquals("DefaultServiceName", AuditConfiguration.SERVICE_NAME.getString());
+        assertEquals(javaHome, AuditConfiguration.INSTANCE_NAME.getString());
+        assertEquals("/tmp/testSysPropValue/test.json", AuditConfiguration.APPENDER_FILE_PATH.getString());
         assertEquals((Long) 30L, AuditConfiguration.APPENDER_FILE_MAXSIZE.getLong());
         assertEquals((Integer) 100, AuditConfiguration.APPENDER_FILE_MAXBACKUP.getInteger());
         assertEquals(Boolean.TRUE, AuditConfiguration.LOCATION.getBoolean());
@@ -58,6 +64,6 @@ public class AuditConfigurationTest {
         assertEquals((Integer) 8056, AuditConfiguration.APPENDER_SOCKET_PORT.getInteger());
         assertEquals("ConsolePattern", AuditConfiguration.APPENDER_CONSOLE_PATTERN.getString());
         assertEquals(LogTarget.ERROR, AuditConfiguration.APPENDER_CONSOLE_TARGET.getValue(LogTarget.class));
-        assertEquals(LogAppenders.SOCKET, AuditConfiguration.LOG_APPENDER.getValue(LogAppenders.class));
+        assertEquals(expectedAppenders, AuditConfiguration.LOG_APPENDER.getValue(LogAppendersSet.class));
     }
 }
