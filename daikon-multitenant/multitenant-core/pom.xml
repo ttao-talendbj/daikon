@@ -30,7 +30,7 @@
                     </archive>
                     <instructions>
                         <_nouses>true</_nouses>
-                        <Import-Package></Import-Package>
+                        <Import-Package />
                     </instructions>
                 </configuration>
             </plugin>
