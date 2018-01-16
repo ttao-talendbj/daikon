@@ -35,7 +35,7 @@ public class ProxyEventAuditLogger implements InvocationHandler {
         Context context = Utils.getSpecificClassParam(allArgs, Context.class);
         Throwable throwable = Utils.getSpecificClassParam(allArgs, Throwable.class);
 
-        auditLoggerBase.log(event.getLogLevel(), event.getCategory(), context, throwable, event.getMessage());
+        auditLoggerBase.log(event.getLogLevel(), event.getCategory(), context, throwable, event.getMessage(), method.getName());
         return null;
     }
 

@@ -15,8 +15,8 @@ public class ProxyEventAuditLoggerTest {
         Throwable thr = new IllegalStateException();
 
         AuditLoggerBase base = mock(AuditLoggerBase.class);
-        base.log(LogLevel.WARNING, "testcat", ctx, thr, "testmsg");
-        base.log(LogLevel.INFO, "testcat2", null, null, "testmsg2");
+        base.log(LogLevel.WARNING, "testcat", ctx, thr, "testmsg", "testWithParams");
+        base.log(LogLevel.INFO, "testcat2", null, null, "testmsg2", "testWithoutParams");
         replay(base);
 
         TestEvent testEvent = getEventAuditLogger(base);

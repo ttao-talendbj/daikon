@@ -138,6 +138,7 @@ final class Log4j1Configurer {
         metaFields.put(EventFields.MDC_APPLICATION, EventFields.APPLICATION);
         metaFields.put(EventFields.MDC_SERVICE, EventFields.SERVICE);
         metaFields.put(EventFields.MDC_INSTANCE, EventFields.INSTANCE);
+        metaFields.put(EventFields.MDC_EVENT_TYPE, EventFields.EVENT_TYPE);
         //Optional common MDC apps attributes
         metaFields.put(EventFields.MDC_USER, EventFields.USER);
         metaFields.put(EventFields.MDC_OPERATION, EventFields.OPERATION);

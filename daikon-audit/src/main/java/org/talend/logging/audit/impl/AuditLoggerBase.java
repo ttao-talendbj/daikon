@@ -9,4 +9,6 @@ import org.talend.logging.audit.LogLevel;
 public interface AuditLoggerBase {
 
     void log(LogLevel level, String category, Context context, Throwable throwable, String message);
+
+    void log(LogLevel level, String category, Context context, Throwable throwable, String message, String eventType);
 }

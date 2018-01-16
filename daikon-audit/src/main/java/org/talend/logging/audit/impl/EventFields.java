@@ -19,6 +19,8 @@ public class EventFields {
 
     public static final String INSTANCE = "instance";
 
+    public static final String EVENT_TYPE = "eventType";
+
     public static final String USER = "user";
 
     public static final String OPERATION = "operation";
@@ -38,6 +40,8 @@ public class EventFields {
     public static final String MDC_SERVICE = MDC_PREFIX + SERVICE;
 
     public static final String MDC_INSTANCE = MDC_PREFIX + INSTANCE;
+
+    public static final String MDC_EVENT_TYPE = MDC_PREFIX + EVENT_TYPE;
 
     public static final String MDC_USER = USER;
 

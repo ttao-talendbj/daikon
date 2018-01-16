@@ -16,6 +16,10 @@ import org.talend.logging.audit.LogLevel;
 public abstract class AbstractAuditLoggerBase implements AuditLoggerBase {
 
     public void log(LogLevel level, String category, Context context, Throwable throwable, String message) {
+        log(level, category, context, throwable, message, null);
+    }
+
+    public void log(LogLevel level, String category, Context context, Throwable throwable, String message, String eventType) {
         if (category == null) {
             throw new IllegalArgumentException("category cannot be null");
         }
@@ -30,7 +34,19 @@ public abstract class AbstractAuditLoggerBase implements AuditLoggerBase {
             throw new IllegalArgumentException("message cannot be null");
         }
 
-        logInternal(level, categoryNormalized, context, throwable, actualMessage);
+        final boolean eventTypeSet = eventType != null;
+
+        if (eventTypeSet) {
+            MDC.put(EventFields.MDC_EVENT_TYPE, eventType);
+        }
+
+        try {
+            logInternal(level, categoryNormalized, context, throwable, actualMessage);
+        } finally {
+            if (eventTypeSet) {
+                MDC.remove(EventFields.MDC_EVENT_TYPE);
+            }
+        }
     }
 
     private void logInternal(LogLevel level, String category, Context context, Throwable throwable, String message) {
