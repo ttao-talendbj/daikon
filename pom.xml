@@ -230,6 +230,24 @@
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.talend.tools</groupId>
+				<artifactId>talend-tools-maven-plugin</artifactId>
+				<version>1.0.3</version>
+				<executions>
+				<execution>
+					<id>hub-detect</id>
+					<phase>verify</phase>
+					<goals>
+					<goal>hub-detect</goal>
+					</goals>
+				</execution>
+				</executions>
+				<configuration>
+				<blackduckUrl>https://blackduck.talend.com</blackduckUrl>
+				<blackduckName>Talend Daikon (TDKN)</blackduckName>
+				</configuration>
+			</plugin>			
         </plugins>
     </build>
     <profiles>

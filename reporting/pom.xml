@@ -24,16 +24,34 @@
     </properties>
 
 	<dependencies>
+ 		<!-- daikon module -->
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
 			<artifactId>daikon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+ 		<!-- daikon-spring modules -->
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
-			<artifactId>daikon-spring</artifactId>
+			<artifactId>daikon-spring-mongo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-spring-security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-spring-tenancy</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-spring-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-service modules -->
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
 			<artifactId>service-common</artifactId>
@@ -46,7 +64,78 @@
 		</dependency>
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
-			<artifactId>service-examples</artifactId>
+			<artifactId>dashboard-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-logging modules -->
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>logging-event-layout</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>logging-spring-security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-multitenant modules -->
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>multitenant-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>multitenant-spring-async</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>multitenant-spring-web</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-tql modules -->
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-tql-bean</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-tql-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-tql-mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-audit modules -->
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-audit</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-i18n modules -->
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon-i18n</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<!-- daikon-content-service modules -->
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>content-service-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>local-content-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>s3-content-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
