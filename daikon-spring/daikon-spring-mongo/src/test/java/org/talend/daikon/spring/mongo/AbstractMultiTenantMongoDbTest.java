@@ -1,6 +1,6 @@
 package org.talend.daikon.spring.mongo;
 
-import com.github.fakemongo.Fongo;
+import com.mongodb.Mongo;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.change
 public abstract class AbstractMultiTenantMongoDbTest {
 
     @Autowired
-    private Fongo fongo;
+    private Mongo fongo;
 
     @Autowired
     private MongoClientProvider mongoClientProvider;
