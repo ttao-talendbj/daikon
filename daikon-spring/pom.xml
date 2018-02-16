@@ -18,6 +18,7 @@
         <spring.version>4.3.3.RELEASE</spring.version>
     </properties>
     <modules>
+        <module>daikon-migration-core</module>
         <module>daikon-spring-utils</module>
         <module>daikon-spring-mongo</module>
         <module>daikon-spring-security</module>
