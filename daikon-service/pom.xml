@@ -8,6 +8,11 @@
 		<version>1.5.1.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+	<scm>
+        <url>https://github.com/talend/daikon</url>
+        <connection>scm:git:git@github.com:talend//daikon.git</connection>
+        <developerConnection>scm:git:git@github.com:talend//daikon.git</developerConnection>
+    </scm>	
 
 	<groupId>org.talend.daikon</groupId>
 	<artifactId>daikon-service</artifactId>

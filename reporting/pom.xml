@@ -8,6 +8,12 @@
 
 	<name>Aggregation of jacoco reports</name>
 	<url>https://github.com/Talend/daikon</url>
+
+	<scm>
+        <url>https://github.com/talend/daikon</url>
+        <connection>scm:git:git@github.com:talend//daikon.git</connection>
+        <developerConnection>scm:git:git@github.com:talend//daikon.git</developerConnection>
+  </scm>		
 <!--
      This module is used to consolidate jacoco reports into on single report.
      This final report will be used by Codacy to analyze code coverage and
