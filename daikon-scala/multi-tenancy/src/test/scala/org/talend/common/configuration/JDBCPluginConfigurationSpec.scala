@@ -199,8 +199,6 @@ class JDBCPluginConfigurationSpec extends Specification {
       jdbcConf.journalPluginConfig shouldEqual expected
     }
 
-
-
   }
 
 }

@@ -64,6 +64,42 @@ To use this module simply import it as follows in a Maven project:
 
 ## multi-tenancy-jdbc
 
-Common code to configure the akka persistence and slick to be multi-tenant (ie isolate storage per tenant).
+Useful classes to implement per-tenant data isolation with akka persistence JDBC and slick.
 
+Tenant specific configuration is resolved at runtime when a command is executed. It assumes the current tenant identifier can be extracted from the command being processed.
 
+Configuration retrieval is delegated to an implementation of `org.talend.common.configuration.ConfigurationService`.
+
+To see how to use it, refer to the example code: [ExampleEntitySupervisor.scala](src/test/scala/org/talend/common/actor/ExampleEntitySupervisor.scala) and the associated specification [MultiTenantEntitySupervisorSpec.scala](src/test/scala/org/talend/common/actor/MultiTenantEntitySupervisorSpec.scala)
+
+Explaination:
+
+1) ExampleEntitySupervisor.scala  declare a supervisor for the persistent entity ExampleEntity. This supervisor implements the `org.talend.common.actor.MultiTenantEntitySupervisor` trait. It defines how the current tenant can be extracted from a message this actor receives by its `extractTenantIdFrom` method. It defines how the delegate ExampleEntity actor properties are built by its `childProps` method. 
+
+2) The supervisor requires an implementation of `ConfigurationService` to retrieve tenant-specific confirguration. This configuration must be 
+
+```
+database {
+    key1 : value1,
+    key2 : value2
+    ...
+}
+```
+
+and it will be used for both journal and snapshot stores configurations
+
+3) it merges tenant-specific configuration with application default configuration such as
+
+```
+jdbc-journal {
+    common-key1 : common-value1,
+    common-key2 : common-value2,
+    ...
+}
+
+jdbc-snapshot-store {
+    common-key3 : common-value3,
+    common-key4 : common-value4,
+    ...
+}
+```
