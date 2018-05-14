@@ -70,9 +70,11 @@ Tenant specific configuration is resolved at runtime when a command is executed.
 
 Configuration retrieval is delegated to an implementation of `org.talend.common.configuration.ConfigurationService`.
 
+### akka-persistence configuration
+
 To see how to use it, refer to the example code: [ExampleEntitySupervisor.scala](src/test/scala/org/talend/common/actor/ExampleEntitySupervisor.scala) and the associated specification [MultiTenantEntitySupervisorSpec.scala](src/test/scala/org/talend/common/actor/MultiTenantEntitySupervisorSpec.scala)
 
-Explaination:
+Explanation:
 
 1) ExampleEntitySupervisor.scala  declare a supervisor for the persistent entity ExampleEntity. This supervisor implements the `org.talend.common.actor.MultiTenantEntitySupervisor` trait. It defines how the current tenant can be extracted from a message this actor receives by its `extractTenantIdFrom` method. It defines how the delegate ExampleEntity actor properties are built by its `childProps` method. 
 
@@ -103,3 +105,10 @@ jdbc-snapshot-store {
     ...
 }
 ```
+
+### direct slick configuration
+
+When slick is used directly (outside of akka persistence) and the same tenant isolation logic must be required, the `MultiTenantDatabaseConfigProvider` can be used to retrieve a tenant database configuration at runtime.
+
+This provider delegates to 
+
