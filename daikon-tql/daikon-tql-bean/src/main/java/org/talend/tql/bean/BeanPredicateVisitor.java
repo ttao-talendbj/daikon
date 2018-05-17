@@ -438,12 +438,13 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
         List<MethodAccessor> previousMethods = Arrays.asList(previous);
         for (Method method : targetClass.getMethods()) {
             if (method.getName().startsWith("get") || method.getName().startsWith("is")) {
-                final MethodAccessor[] path = concat(previousMethods.stream(), Stream.of(build(method)))
+                final MethodAccessor methodAccessor = build(method);
+                final MethodAccessor[] path = concat(previousMethods.stream(), Stream.of(methodAccessor))
                         .toArray(MethodAccessor[]::new);
                 currentMethods.push(path);
 
                 // Recursively get methods to nested classes (and prevent infinite recursions).
-                final Class<?> returnType = method.getReturnType();
+                final Class<?> returnType = methodAccessor.getReturnType();
                 if (!returnType.isPrimitive() && visitedClasses.add(returnType)) {
                     visitClassMethods(returnType, visitedClasses, path);
                 }
