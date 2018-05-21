@@ -85,7 +85,7 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
 
     private static Stream<Object> invoke(Object o, MethodAccessor[] methods) {
         try {
-            Set<Object> currentObject = Collections.singleton(o);
+            Set<Object> currentObject = singleton(o);
             for (MethodAccessor method : methods) {
                 currentObject = method.getValues(currentObject);
             }
