@@ -19,6 +19,12 @@ To use this module, first include it in your project classpath
     </dependency>
 ```
 
+Per-document migration
+======================
+
+To enable per-document migration extension add `mongodb.migrations.enabled` to `true` in the application configuration. 
+See `daikon-migration-core` for more details.
+
 Multi tenancy support
 =====================
 
