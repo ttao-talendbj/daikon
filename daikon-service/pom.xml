@@ -11,7 +11,7 @@
 
 	<groupId>org.talend.daikon</groupId>
 	<artifactId>daikon-service</artifactId>
-	<version>0.24.0</version>
+	<version>0.24.1</version>
 	<modules>
 		<module>service-common</module>
 		<module>service-docs</module>
