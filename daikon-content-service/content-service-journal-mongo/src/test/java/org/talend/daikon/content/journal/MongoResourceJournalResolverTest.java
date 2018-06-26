@@ -120,6 +120,25 @@ public class MongoResourceJournalResolverTest {
     }
 
     @Test
+    public void testClearWithPattern() {
+        // Given
+        resolver.add("location3.0");
+        resolver.add("location3.0/location3.1");
+        resolver.add("location3.0/location3.2/location3.2.1");
+        resolver.add("location3.0/location3.3/location3.3.1");
+
+        assertTrue(resolver.exist("location3.0"));
+        assertTrue(resolver.exist("location3.0/location3.3/location3.3.1"));
+
+        resolver.clear("location3.0/**");
+
+        assertTrue(resolver.exist("location3.0"));
+        assertFalse(resolver.exist("location3.0/location3.2/location3.2.1"));
+        assertFalse(resolver.exist("location3.0/location3.3/location3.3.1"));
+
+    }
+
+    @Test
     public void testAdd() {
         // Given
         long nbLocation = countRecord();
@@ -224,7 +243,6 @@ public class MongoResourceJournalResolverTest {
 
         // When
         resolver.sync(resourceResolver);
-        resolver.waitForSync();
 
         // Then
         verify(resourceResolver, times(1)).getResources(eq("/**"));
@@ -246,7 +264,6 @@ public class MongoResourceJournalResolverTest {
         } catch (Exception e) {
             // Expected
         }
-        resolver.waitForSync();
 
         // Then
         assertFalse(repository.exists(MongoResourceJournalResolver.JOURNAL_READY_MARKER));
@@ -261,7 +278,6 @@ public class MongoResourceJournalResolverTest {
         // When
         resolver.validate();
         resolver.sync(resourceResolver);
-        resolver.waitForSync();
 
         // Then
         verify(resourceResolver, never()).getResources(eq("/**"));
