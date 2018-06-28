@@ -131,4 +131,8 @@
 
 		</plugins>
 	</build>
+
+  <scm>
+    <tag>maintenance/0.25</tag>
+  </scm>
 </project>

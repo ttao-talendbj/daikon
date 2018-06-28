@@ -117,4 +117,8 @@
 			<url>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/</url>
 		</repository>
 	</distributionManagement>
+
+  <scm>
+    <tag>maintenance/0.25</tag>
+  </scm>
 </project>
