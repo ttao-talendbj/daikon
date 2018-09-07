@@ -1,5 +1,8 @@
 package org.talend.daikon.logging.kafka;
 
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -10,10 +13,7 @@ import org.junit.Test;
 import org.talend.daikon.logging.TalendKafkaConsumerInterceptor;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,8 +34,11 @@ public class ConsumerInterceptorsTest {
         String ip = "192.168.50.130";
         String message = "kafka_message" + ip;
 
+        GenericRecord avroRecord = getGenericRecord();
+        avroRecord.put("tenantId", "0123456789");
+
         ConsumerRecord<Object, Object> consumerRecord = new ConsumerRecord<>(topic, partition, 0, 0L, TimestampType.CREATE_TIME,
-                0L, 0, 0, 1, message.getBytes(UTF8));
+                0L, 0, 0, avroRecord, message.getBytes(UTF8));
 
         List<ConsumerInterceptor<Object, Object>> interceptorList = new ArrayList<>();
         TalendKafkaConsumerInterceptor interceptor = new TalendKafkaConsumerInterceptor();
@@ -58,4 +61,15 @@ public class ConsumerInterceptorsTest {
         assertEquals(1, partInterceptedRecs.count());
         interceptors.close();
     }
+
+    private GenericRecord getGenericRecord() {
+        String accountSchema = "{\"namespace\": \"org.talend.daikon.messages\", \"type\": \"record\", "
+                + "\"name\": \"MessageHeader\"," + "\"fields\": [{\"name\": \"tenantId\", \"type\": \"string\"}]}";
+
+        Schema.Parser parser = new Schema.Parser();
+        Schema schema = parser.parse(accountSchema);
+        GenericRecord avroRecord = new GenericData.Record(schema);
+        return avroRecord;
+    }
+
 }
