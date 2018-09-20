@@ -15,8 +15,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern1() {
         Criteria criteria = doTest("name complies 'aaaaaaa'");
-        Criteria expectedCriteria = Criteria.where("name")
-                .regex("^[a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ]$");
+        Criteria expectedCriteria = Criteria.where("name").regex(
+                "^([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(1, records.size());
@@ -26,8 +26,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern2() {
         Criteria criteria = doTest("name complies 'Aaaaaaa'");
-        Criteria expectedCriteria = Criteria.where("name")
-                .regex("^[A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ]$");
+        Criteria expectedCriteria = Criteria.where("name").regex(
+                "^([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(1, records.size());
@@ -37,8 +37,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern3() {
         Criteria criteria = doTest("name complies 'Aaaaaa 9aaa'");
-        Criteria expectedCriteria = Criteria.where("name")
-                .regex("^[A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ] [0-9][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ]$");
+        Criteria expectedCriteria = Criteria.where("name").regex(
+                "^([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}]) ([\\x{30}-\\x{39}]|[\\x{FF10}-\\x{FF19}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(1, records.size());
@@ -48,8 +48,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern4() {
         Criteria criteria = doTest("name complies 'Aaa Aaaa'");
-        Criteria expectedCriteria = Criteria.where("name")
-                .regex("^[A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ] [A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ]$");
+        Criteria expectedCriteria = Criteria.where("name").regex(
+                "^([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}]) ([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(0, records.size());
@@ -58,7 +58,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern5() {
         Criteria criteria = doTest("name complies 'Aaaa_99'");
-        Criteria expectedCriteria = Criteria.where("name").regex("^[A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ]_[0-9][0-9]$");
+        Criteria expectedCriteria = Criteria.where("name").regex(
+                "^([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])_([\\x{30}-\\x{39}]|[\\x{FF10}-\\x{FF19}])([\\x{30}-\\x{39}]|[\\x{FF10}-\\x{FF19}])$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(0, records.size());
@@ -67,7 +68,7 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern6() {
         Criteria criteria = doTest("name complies ']ss@'");
-        Criteria expectedCriteria = Criteria.where("name").regex("^]ss@$");
+        Criteria expectedCriteria = Criteria.where("name").regex("^\\]ss@$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(0, records.size());
@@ -76,8 +77,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern7() {
         Criteria criteria = doTest("name complies 'Aaaa أبجد Aaaa'");
-        Criteria expectedCriteria = Criteria.where("name")
-                .regex("^[A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ] أبجد [A-Z|À-ß][a-z|à-ÿ][a-z|à-ÿ][a-z|à-ÿ]$");
+        Criteria expectedCriteria = Criteria.where("name").regex(
+                "^([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}]) أبجد ([\\x{41}-\\x{5A}]|[\\x{C0}-\\x{D6}]|[\\x{D8}-\\x{DE}]|[\\x{FF21}-\\x{FF3A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}])$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(0, records.size());
