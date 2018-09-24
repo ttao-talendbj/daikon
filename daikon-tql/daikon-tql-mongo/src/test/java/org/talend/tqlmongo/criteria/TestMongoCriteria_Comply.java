@@ -15,8 +15,8 @@ public class TestMongoCriteria_Comply extends TestMongoCriteria_Abstract {
     @Test
     public void testParseFieldCompliesPattern1() {
         Criteria criteria = doTest("name complies 'aaaaaaa'");
-        Criteria expectedCriteria = Criteria.where("name").regex(
-                "^([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}]){7}$");
+        Criteria expectedCriteria = Criteria.where("name")
+                .regex("^([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}]){7}$");
         Assert.assertEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
         Assert.assertEquals(1, records.size());
