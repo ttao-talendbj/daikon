@@ -1,24 +1,19 @@
 package org.talend.daikon.pattern.word;
 
-public class WordPatternToRegexConstants {
+class WordPatternToRegexConstants {
 
     // Iso to Character.isDigit
-    public static final String DIGIT = "\\p{Nd}";
+    static final String DIGIT = "\\p{Nd}";
 
-    // Iso to Character.isLetter
-    public static final String LETTER = "\\p{L}";
+    // almost iso to Character.isIdeographic
+    static final String IDEOGRAM = "\\p{script=Han}";
 
-    // Iso to Character.isIdeographic
-    public static final String IDEOGRAM = "\\p{InHangul_Jamo}|\\p{InHangul_Compatibility_Jamo}|\\p{InHangul_Syllables}|\\p{script=Han}";
+    // Iso to Character.getType(codePoint) == Character.UPPERCASE_LETTER
+    static final String UPPER_CHAR = "\\p{Lu}";
 
-    public static final String CHAR = WordPatternToRegexConstants.LETTER + "&&[^" + IDEOGRAM + "]"; // Except ideograms
+    // Iso to Character.getType(codePoint) == Character.LOWERCASE_LETTER
+    static final String LOWER_CHAR = "\\p{Ll}";
 
-    // Iso to Character.isUpperCase
-    public static final String UPPER_CHAR = "\\p{Lu}";
-
-    public static final String LOWER_CHAR = CHAR + "&&[^" // Except uppers because only lower won't contain insensitive letters
-            + WordPatternToRegexConstants.UPPER_CHAR + "]";
-
-    public static final String REGEX_ESCAPE_PATTERN = "[\\.\\^\\$\\*\\+\\?\\(\\)\\[\\]\\{\\}\\\\\\|]";
+    static final String CHAR = WordPatternToRegexConstants.UPPER_CHAR + WordPatternToRegexConstants.LOWER_CHAR;
 
 }
