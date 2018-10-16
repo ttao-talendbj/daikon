@@ -7,10 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.junit.Test;
 import org.talend.tql.model.Expression;
 import org.talend.tql.parser.Tql;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BeanPredicateVisitorTest {
 

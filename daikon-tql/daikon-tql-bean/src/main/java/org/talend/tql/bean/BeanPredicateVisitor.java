@@ -12,16 +12,13 @@
 
 package org.talend.tql.bean;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.talend.daikon.pattern.character.CharPatternToRegex;
-import org.talend.daikon.pattern.word.WordPatternToRegex;
-import org.talend.tql.model.*;
-import org.talend.tql.visitor.IASTVisitor;
+import static java.lang.Double.parseDouble;
+import static java.lang.String.valueOf;
+import static java.util.Collections.singleton;
+import static java.util.Optional.of;
+import static java.util.stream.Stream.concat;
+import static org.apache.commons.lang.StringUtils.equalsIgnoreCase;
+import static org.talend.tql.bean.MethodAccessorFactory.build;
 
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -39,13 +36,17 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static java.lang.Double.parseDouble;
-import static java.lang.String.valueOf;
-import static java.util.Collections.singleton;
-import static java.util.Optional.of;
-import static java.util.stream.Stream.concat;
-import static org.apache.commons.lang.StringUtils.equalsIgnoreCase;
-import static org.talend.tql.bean.MethodAccessorFactory.build;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.talend.daikon.pattern.character.CharPatternToRegex;
+import org.talend.daikon.pattern.word.WordPatternToRegex;
+import org.talend.tql.model.*;
+import org.talend.tql.visitor.IASTVisitor;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A {@link IASTVisitor} implementation that generates a {@link Predicate predicate} that allows matching on a
@@ -82,7 +83,7 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
     /**
      * Test a string value against a pattern returned during value analysis.
      *
-     * @param value   A string value. May be null.
+     * @param value A string value. May be null.
      * @param pattern A pattern as returned in value analysis.
      * @return <code>true</code> if value complies, <code>false</code> otherwise.
      */
