@@ -21,21 +21,21 @@ public enum CharPattern {
 
     FULLWIDTH_UPPER_LATIN('A', CharPatternToRegexConstants.FULLWIDTH_UPPER_LATIN),
 
-    LOWER_HIRAGANA('h', CharPatternToRegexConstants.LOWER_HIRAGANA),
+    HIRAGANA('H', CharPatternToRegexConstants.HIRAGANA),
 
-    UPPER_HIRAGANA('H', CharPatternToRegexConstants.UPPER_HIRAGANA),
+    HALFWIDTH_KATAKANA('k', CharPatternToRegexConstants.HALFWIDTH_KATAKANA),
 
-    LOWER_KATAKANA('k', CharPatternToRegexConstants.LOWER_KATAKANA),
-
-    UPPER_KATAKANA('K', CharPatternToRegexConstants.UPPER_KATAKANA),
+    FULLWIDTH_KATAKANA('K', CharPatternToRegexConstants.FULLWIDTH_KATAKANA),
 
     KANJI('C', CharPatternToRegexConstants.KANJI),
+
+    KANJI_RARE('C', CharPatternToRegexConstants.KANJI_RARE),
 
     HANGUL('G', CharPatternToRegexConstants.HANGUL);
 
     private Character replaceChar;
 
-    private String pattern;
+    private CharPatternToRegexConstants pattern;
 
     // Useful for quick contain
     private Set<Integer> codePointSet = new HashSet<>();
@@ -55,10 +55,10 @@ public enum CharPattern {
         return lookup.get(pattern);
     }
 
-    CharPattern(char replace, String pattern) {
+    CharPattern(char replace, CharPatternToRegexConstants pattern) {
         replaceChar = replace;
         this.pattern = pattern;
-        buildCharacters(pattern);
+        buildCharacters(pattern.getRange());
     }
 
     private void buildCharacters(String pattern) {
@@ -96,7 +96,7 @@ public enum CharPattern {
         return replaceChar;
     }
 
-    public String getPattern() {
+    public CharPatternToRegexConstants getPattern() {
         return pattern;
     }
 
