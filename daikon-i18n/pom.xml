@@ -205,7 +205,7 @@
     <connection>scm:git:https://github.com/Talend/daikon.git</connection>
     <developerConnection>scm:git:https://github.com/Talend/daikon.git</developerConnection>
     <url>https://github.com/Talend/daikon</url>
-    <tag>HEAD</tag>
+    <tag>maintenance/0.26</tag>
   </scm>
 
   <developers>
