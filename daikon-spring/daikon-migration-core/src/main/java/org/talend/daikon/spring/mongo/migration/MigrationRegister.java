@@ -1,13 +1,13 @@
 package org.talend.daikon.spring.mongo.migration;
 
+import static java.util.Collections.emptyList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static java.util.Collections.emptyList;
 
 /**
  * A registration class for {@link Migration migrations}.
@@ -25,6 +25,7 @@ public class MigrationRegister {
 
     /**
      * Register a {@link Migration migration} for a given <code>clazz</code>
+     * 
      * @param clazz The class to register for migration
      * @param migration The {@link Migration} implementation
      * @param <T> The type of the class registered for migration.
