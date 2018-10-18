@@ -32,9 +32,13 @@ fieldIsInvalid : (FIELD | allFields | ~INT | ~DECIMAL) IS INVALID;
 
 fieldContains : (FIELD | allFields | ~INT | ~DECIMAL) CONTAINS QUOTED_VALUE;
 
+fieldContainsIgnoreCase : (FIELD | allFields | ~INT | ~DECIMAL) CONTAINS_IGNORE_CASE QUOTED_VALUE;
+
 fieldMatchesRegexp : (FIELD | allFields | ~INT | ~DECIMAL) MATCHES QUOTED_VALUE;
 
 fieldCompliesPattern : (FIELD | allFields | ~INT | ~DECIMAL) COMPLIES QUOTED_VALUE;
+
+fieldWordCompliesPattern : (FIELD | allFields | ~INT | ~DECIMAL) WORD_COMPLIES QUOTED_VALUE;
 
 fieldBetween : (FIELD | allFields | ~INT | ~DECIMAL) BETWEEN (LBRACK | RBRACK) literalValue COMMA literalValue (LBRACK | RBRACK);
 
@@ -53,8 +57,10 @@ atom : booleanComparison
  | fieldIsValid
  | fieldIsInvalid
  | fieldContains
+ | fieldContainsIgnoreCase
  | fieldMatchesRegexp
  | fieldCompliesPattern
+ | fieldWordCompliesPattern
  | fieldBetween
  | fieldIn
  | notExpression

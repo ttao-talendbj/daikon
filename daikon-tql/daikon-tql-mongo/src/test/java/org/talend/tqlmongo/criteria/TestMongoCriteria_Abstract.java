@@ -7,8 +7,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.mongodb.DBObject;
+import com.mongodb.FongoDB;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -36,7 +39,8 @@ public abstract class TestMongoCriteria_Abstract {
 
     private final static Map<String, Double> RECORDS = Collections.unmodifiableMap(Stream
             .of(new AbstractMap.SimpleEntry<>("ghassen", 30d), new AbstractMap.SimpleEntry<>("Ghassen", 31.2d),
-                    new AbstractMap.SimpleEntry<>("Benoit", 29d), new AbstractMap.SimpleEntry<>("Benoit 2eme", 28.8d))
+                    new AbstractMap.SimpleEntry<>("Benoit", 29d), new AbstractMap.SimpleEntry<>("Benoit 2eme", 28.8d),
+                    new AbstractMap.SimpleEntry<>("+?'n$", 28.8d))
             .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
     private static MongoTemplate mongoTemplate;
@@ -61,7 +65,7 @@ public abstract class TestMongoCriteria_Abstract {
         });
     }
 
-    protected Criteria doTest(String query) throws Exception {
+    protected Criteria doTest(String query) {
         ANTLRInputStream input = new ANTLRInputStream(query);
         TqlLexer lexer = new TqlLexer(input);
         TqlParser parser = new TqlParser(new CommonTokenStream(lexer));
@@ -73,8 +77,29 @@ public abstract class TestMongoCriteria_Abstract {
 
     List<Record> getRecords(Criteria criteria) {
         Query q = new Query();
-        q.addCriteria(criteria);
+        if (mongoTemplate.getDb() instanceof FongoDB) {
+            q.addCriteria(new Criteria() {
+
+                @Override
+                public DBObject getCriteriaObject() {
+                    return replaceRegexRecursively(criteria.getCriteriaObject());
+                }
+            });
+        } else
+            q.addCriteria(criteria);
         return mongoTemplate.find(q, Record.class);
+    }
+
+    private DBObject replaceRegexRecursively(DBObject criteriaObject) {
+        for (String key : criteriaObject.keySet()) {
+            if (StringUtils.equals(key, "$regex")) {
+                String newRegex = ((String) criteriaObject.get(key)).replaceAll("Han", "script=Han");
+                criteriaObject.put(key, newRegex);
+            } else if (criteriaObject.get(key) instanceof DBObject) {
+                criteriaObject.put(key, replaceRegexRecursively((DBObject) criteriaObject.get(key)));
+            }
+        }
+        return criteriaObject;
     }
 
     public class Record {

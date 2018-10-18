@@ -3,11 +3,8 @@ package org.talend.tql.bean;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.junit.Test;
 import org.talend.tql.model.Expression;
 import org.talend.tql.parser.Tql;
@@ -91,7 +88,31 @@ public class BeanPredicateVisitorTest {
     @Test
     public void containsShouldMatchBean() throws Exception {
         // given
+        final Expression query = Tql.parse("value contains 'alu'");
+
+        // when
+        final Predicate<Bean> predicate = query.accept(new BeanPredicateVisitor<>(Bean.class));
+
+        // then
+        assertTrue(predicate.test(bean));
+    }
+
+    @Test
+    public void containsShouldNotMatchBean() throws Exception {
+        // given
         final Expression query = Tql.parse("value contains 'ALU'");
+
+        // when
+        final Predicate<Bean> predicate = query.accept(new BeanPredicateVisitor<>(Bean.class));
+
+        // then
+        assertFalse(predicate.test(bean));
+    }
+
+    @Test
+    public void containsIgnoreCaseShouldMatchBean() throws Exception {
+        // given
+        final Expression query = Tql.parse("value containsIgnoreCase 'ALu'");
 
         // when
         final Predicate<Bean> predicate = query.accept(new BeanPredicateVisitor<>(Bean.class));
@@ -317,18 +338,6 @@ public class BeanPredicateVisitorTest {
     }
 
     @Test
-    public void equalsShouldMatchBeanOnList() throws Exception {
-        // given
-        final Expression query = Tql.parse("nestedBeans.nestedValue = 'nested'");
-
-        // when
-        final Predicate<Bean> predicate = query.accept(new BeanPredicateVisitor<>(Bean.class));
-
-        // then
-        assertTrue(predicate.test(bean));
-    }
-
-    @Test
     public void equalsShouldMatchBeanOnNested() throws Exception {
         // given
         final Expression query = Tql.parse("nested.nestedValue = 'nested'");
@@ -374,9 +383,9 @@ public class BeanPredicateVisitorTest {
     }
 
     @Test
-    public void shouldMatchOnJsonPropertyName() {
+    public void testAccept_parseFieldCompliesPatternword() {
         // given
-        final Expression query = Tql.parse("aDifferentName = 'myValue'");
+        final Expression query = Tql.parse("value wordComplies '[word]'");
 
         // when
         final Predicate<Bean> predicate = query.accept(new BeanPredicateVisitor<>(Bean.class));
@@ -385,12 +394,20 @@ public class BeanPredicateVisitorTest {
         assertTrue(predicate.test(bean));
     }
 
+    @Test
+    public void testParseFieldNotCompliesPatternWord() {
+        // given
+        final Expression query = Tql.parse("value wordComplies '[Word]'");
+
+        // when
+        final Predicate<Bean> predicate = query.accept(new BeanPredicateVisitor<>(Bean.class));
+
+        // then
+        assertFalse(predicate.test(bean));
+    }
+
     // Test class
     public static class Bean {
-
-        public List<NestedBean> getNestedBeans() {
-            return Arrays.asList(new NestedBean(), new NestedBean());
-        }
 
         public String getValue() {
             return "value";
@@ -402,16 +419,6 @@ public class BeanPredicateVisitorTest {
 
         public NestedBean getNested() {
             return new NestedBean();
-        }
-
-        @JsonProperty("aDifferentName")
-        public String getMyValue() {
-            return "myValue";
-        }
-
-        @JsonProperty("aDifferentName")
-        public void setMyValue() {
-            // No code needed, just to ensure setters are not detected.
         }
     }
 

@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.util.StringUtils;
+import org.talend.daikon.pattern.character.CharPatternToRegex;
+import org.talend.daikon.pattern.word.WordPatternToRegex;
 import org.talend.tql.model.*;
 import org.talend.tql.visitor.IASTVisitor;
 import org.talend.tqlmongo.excp.TqlMongoException;
@@ -15,6 +19,10 @@ import org.talend.tqlmongo.excp.TqlMongoException;
  * Created by gmzoughi on 30/06/16.
  */
 public class ASTVisitor implements IASTVisitor<Object> {
+
+    public static final String MONGO_REGEX_IGNORE_CASE_OPTION = "i";
+
+    public static final String MONGO_ESCAPE_PATTERN = "[\\.\\^\\$\\*\\+\\?\\(\\)\\[\\{\\\\\\|]";
 
     private boolean isNegation = false;
 
@@ -69,8 +77,8 @@ public class ASTVisitor implements IASTVisitor<Object> {
         if (criteria.size() == 1)
             return criteria.get(0);
         if (!isNegation)
-            return new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()]));
-        return new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()]));
+            return new Criteria().andOperator(criteria.toArray(new Criteria[0]));
+        return new Criteria().orOperator(criteria.toArray(new Criteria[0]));
     }
 
     @Override
@@ -86,8 +94,8 @@ public class ASTVisitor implements IASTVisitor<Object> {
         if (criteria.size() == 1)
             return criteria.get(0);
         if (!isNegation)
-            return new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()]));
-        return new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()]));
+            return new Criteria().orOperator(criteria.toArray(new Criteria[0]));
+        return new Criteria().andOperator(criteria.toArray(new Criteria[0]));
     }
 
     @Override
@@ -190,7 +198,7 @@ public class ASTVisitor implements IASTVisitor<Object> {
                 return Criteria.where(fieldName).is("");
             return Criteria.where(fieldName).ne("");
         }
-        String regex = this.patternToMongoRegex(pattern);
+        String regex = CharPatternToRegex.toRegex(pattern);
         Pattern regexCompiled = Pattern.compile(regex);
         if (!isNegation)
             return Criteria.where(fieldName).regex(regexCompiled);
@@ -198,12 +206,41 @@ public class ASTVisitor implements IASTVisitor<Object> {
     }
 
     @Override
+    public Object visit(FieldWordCompliesPattern elt) {
+        String fieldName = (String) elt.getField().accept(this);
+        String pattern = elt.getPattern();
+        if (StringUtils.isEmpty(pattern)) {
+            if (!isNegation)
+                return Criteria.where(fieldName).is("");
+            return Criteria.where(fieldName).ne("");
+        }
+        String regex = WordPatternToRegex.toRegex(pattern, true);
+        return getRegexpForWordPattern(fieldName, regex, isNegation);
+    }
+
+    private Criteria getRegexpForWordPattern(String fieldName, String regex, boolean isWithNegation) {
+        return new Criteria() {
+
+            @Override
+            public DBObject getCriteriaObject() {
+                DBObject regexObject = new BasicDBObject("$regex", regex.replaceAll("script=Han", "Han"));
+                if (!isWithNegation)
+                    return new BasicDBObject(fieldName, regexObject);
+                return new BasicDBObject(fieldName, new BasicDBObject("$not", regexObject));
+            }
+        };
+    }
+
+    @Override
     public Object visit(FieldContainsExpression elt) {
+        String options = elt.isCaseSensitive() ? "" : MONGO_REGEX_IGNORE_CASE_OPTION;
         String fieldName = (String) elt.getField().accept(this);
         String value = elt.getValue();
+        String regex = value.replaceAll(MONGO_ESCAPE_PATTERN, "\\\\$0");
+
         if (!isNegation)
-            return Criteria.where(fieldName).regex(value);
-        return Criteria.where(fieldName).not().regex(value);
+            return Criteria.where(fieldName).regex(regex, options);
+        return Criteria.where(fieldName).not().regex(regex, options);
     }
 
     @Override
@@ -257,30 +294,4 @@ public class ASTVisitor implements IASTVisitor<Object> {
     private String getFieldName(String fieldName) {
         return fieldName;
     }
-
-    protected String patternToMongoRegex(String pattern) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("^");
-        for (int i = 0; i < pattern.length(); i++) {
-            char c = pattern.charAt(i);
-            switch (c) {
-            case 'a':
-                sb.append("[a-z|à-ÿ]");
-                break;
-            case 'A':
-                sb.append("[A-Z|À-ß]");
-                break;
-            case '9':
-                sb.append("[0-9]");
-                break;
-            default:
-                // Special characters for PCRE syntax (used by mongoDB for regex) need to be escaped.
-                sb.append(String.valueOf(c).replaceAll("[\\.\\^\\$\\*\\+\\?\\(\\)\\[\\{\\\\\\|]", "\\\\$0"));
-                break;
-            }
-        }
-        sb.append("$");
-        return sb.toString();
-    }
-
 }

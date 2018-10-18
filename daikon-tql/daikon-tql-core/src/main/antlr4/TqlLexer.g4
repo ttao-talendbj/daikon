@@ -30,8 +30,10 @@ GET: '>=';
 // advanced comparison operators
 IS : 'is';
 CONTAINS : 'contains';
+CONTAINS_IGNORE_CASE : 'containsIgnoreCase';
 MATCHES : '~';
 COMPLIES : 'complies';
+WORD_COMPLIES : 'wordComplies';
 BETWEEN : 'between';
 IN : 'in';
 ALL_FIELDS: '*';
