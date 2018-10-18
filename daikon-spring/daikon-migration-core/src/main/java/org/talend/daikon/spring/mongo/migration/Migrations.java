@@ -1,16 +1,17 @@
 package org.talend.daikon.spring.mongo.migration;
 
-import com.github.zafarkhaja.semver.Version;
-import com.google.common.base.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.talend.daikon.spring.mongo.migration.MigrationRegister.registeredExtractors;
 
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.talend.daikon.spring.mongo.migration.MigrationRegister.registeredExtractors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.zafarkhaja.semver.Version;
+import com.google.common.base.Strings;
 
 /**
  * <p>
@@ -35,8 +36,8 @@ public class Migrations {
 
     /**
      * <p>
-     * Run migrations on <code>T</code> target (a POJO for example), using <code>S</code> as additional input.
-     * The <code>sourceVersion</code> is a {@link Function} to extract version information from source object.
+     * Run migrations on <code>T</code> target (a POJO for example), using <code>S</code> as additional input. The
+     * <code>sourceVersion</code> is a {@link Function} to extract version information from source object.
      * </p>
      * <p>
      * Migrations are looked up with the following strategies:
@@ -46,11 +47,11 @@ public class Migrations {
      * </ul>
      * </p>
      *
-     * @param source        The source object (a {MongoDB's DBObject for example).
+     * @param source The source object (a {MongoDB's DBObject for example).
      * @param sourceVersion A {@link Function} to extract source version as a string.
-     * @param target        The target object (a POJO for example).
-     * @param <S>           The source type.
-     * @param <T>           The target type.
+     * @param target The target object (a POJO for example).
+     * @param <S> The source type.
+     * @param <T> The target type.
      * @return An eventually modified target object based on applicable {@link MigrationRule migration rules} that may
      * (but are not required to) use source object data as input.
      * @see MigrationRegister
@@ -58,36 +59,40 @@ public class Migrations {
      */
     public static <S, T> T migrate(S source, Function<S, String> sourceVersion, T target) {
         final Class<T> targetClass = (Class<T>) target.getClass();
-        final Function<Class<?>, Stream<Class<?>>> extractors = t -> Stream.concat(INNER_CLASS_EXTRACTOR.apply(t), registeredExtractors().apply(t));
+        final Function<Class<?>, Stream<Class<?>>> extractors = t -> Stream.concat(INNER_CLASS_EXTRACTOR.apply(t),
+                registeredExtractors().apply(t));
         final Migration<S, T> migration = compute(targetClass, extractors, sourceVersion.apply(source));
         return migration.apply(source, target);
     }
 
     // An internal method to return ordered migration steps.
-    private static <S, T> Migration<S, T> compute(Class<T> target, Function<Class<?>, Stream<Class<?>>> extractor, String sourceVersion) {
+    private static <S, T> Migration<S, T> compute(Class<T> target, Function<Class<?>, Stream<Class<?>>> extractor,
+            String sourceVersion) {
         if (Strings.isNullOrEmpty(sourceVersion)) {
             return (s, t) -> t;
         }
         final Version parsedSourceVersion = Version.valueOf(sourceVersion);
-        return new CompositeMigration<>(extractor.apply(target)
-                .map(r -> {
-                    final MigrationRule migrationRule = r.getAnnotation(MigrationRule.class);
-                    final Version ruleVersion = Version.valueOf(migrationRule.version());
-                    if (parsedSourceVersion.lessThan(ruleVersion)) {
-                        try {
-                            final Migration<S, T> migration = (Migration<S, T>) r.newInstance();
-                            return new MigrationMatch<>(migration, ruleVersion);
-                        } catch (InstantiationException | IllegalAccessException e) {
-                            LOGGER.error("Migration rule '" + r.getName() + "' must have default constructor.", e);
-                            return null;
-                        }
-                    } else {
-                        return null;
-                    }
-                }) //
-                .filter(Objects::nonNull) //
-                .sorted() //
-                .map(r -> r.migration) //
+        return new CompositeMigration<>(extractor.apply(target).map(r -> {
+            final MigrationRule migrationRule = r.getAnnotation(MigrationRule.class);
+            final Version ruleVersion = Version.valueOf(migrationRule.version());
+            if (parsedSourceVersion.lessThan(ruleVersion)) {
+                try {
+                    final Migration<S, T> migration = (Migration<S, T>) r.newInstance();
+                    return new MigrationMatch<>(migration, ruleVersion);
+                } catch (InstantiationException | IllegalAccessException e) {
+                    LOGGER.error("Migration rule '" + r.getName() + "' must have default constructor.", e);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }) //
+                .filter(Objects::nonNull)
+                //
+                .sorted()
+                //
+                .map(r -> r.migration)
+                //
                 .collect(Collectors.toList()) //
         );
     }

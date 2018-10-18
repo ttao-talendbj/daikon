@@ -1,15 +1,16 @@
 package org.talend.daikon.spring.mongo.migration;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.function.Function;
+
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import java.util.function.Function;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 public class MigrationsTest {
 

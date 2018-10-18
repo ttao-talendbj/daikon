@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * An internal class meant to group together several {@link Migration migrations}.
+ * 
  * @param <S> The source type of the migration.
  * @param <T> The target type of the migration.
  */
