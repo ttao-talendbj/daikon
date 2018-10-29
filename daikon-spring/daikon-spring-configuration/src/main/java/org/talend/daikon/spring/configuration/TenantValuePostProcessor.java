@@ -56,11 +56,6 @@ public class TenantValuePostProcessor implements BeanPostProcessor, ApplicationC
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         assertValidBean(bean, beanName);
 
         final Environment environment = applicationContext.getBean(Environment.class);
@@ -70,7 +65,7 @@ public class TenantValuePostProcessor implements BeanPostProcessor, ApplicationC
                     final Object value = HELPER.replacePlaceholders(annotation.value(), placeholderName -> {
                         final Tenant tenant = TenancyContextHolder.getContext().getTenant();
                         final String tenantId = String.valueOf(tenant.getIdentity());
-                        final String configurationKey = tenantId + "." + placeholderName;
+                        final String configurationKey = tenantId + "/" + placeholderName;
 
                         LOGGER.debug("Looking for configuration key '{}' for tenant '{}'", placeholderName, tenantId);
                         LOGGER.debug("Resolved tenant configuration key '{}'", configurationKey);
@@ -83,6 +78,11 @@ public class TenantValuePostProcessor implements BeanPostProcessor, ApplicationC
                 }, //
                 f -> findAnnotation(f, TenantValue.class) != null //
         );
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         return bean;
     }
 

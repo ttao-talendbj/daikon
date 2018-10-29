@@ -1,6 +1,7 @@
 package org.talend.daikon.spring.etcd;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -10,6 +11,7 @@ import org.springframework.lang.Nullable;
 import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
 import io.etcd.jetcd.KV;
+import io.etcd.jetcd.KeyValue;
 import io.etcd.jetcd.kv.GetResponse;
 
 /**
@@ -19,8 +21,11 @@ public class EtcdPropertySource extends PropertySource<Client> {
 
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
-    public EtcdPropertySource(String name, Client source) {
+    private String base;
+
+    public EtcdPropertySource(String name, String base, Client source) {
         super(name, source);
+        this.base = base;
     }
 
     @Override
@@ -29,8 +34,15 @@ public class EtcdPropertySource extends PropertySource<Client> {
         try {
             final Client source = getSource();
             final KV kvClient = source.getKVClient();
-            final CompletableFuture<GetResponse> future = kvClient.get(ByteSequence.from(name, CHARSET));
-            return future.get().getKvs().get(0).getValue().toString(CHARSET);
+            final String etcdKeyName = "/" + base + '/' + name;
+            final CompletableFuture<GetResponse> future = kvClient.get(ByteSequence.from(etcdKeyName, CHARSET));
+            final List<KeyValue> values = future.get().getKvs();
+            if (!values.isEmpty()) {
+                final KeyValue keyValue = values.get(0);
+                return keyValue.getValue().toString(CHARSET);
+            } else {
+                return null;
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;

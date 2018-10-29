@@ -31,7 +31,7 @@ public class TenantValuePostProcessorTest {
         final Environment environment = mock(Environment.class);
         when(context.getBean(eq(Environment.class))).thenReturn(environment);
 
-        when(environment.getProperty("tenant-1234.value")).thenReturn("Tenant value");
+        when(environment.getProperty("tenant-1234/value")).thenReturn("Tenant value");
 
         final TenancyContext tenancyContext = TenancyContextHolder.createEmptyContext();
         tenancyContext.setTenant(new DefaultTenant("tenant-1234", null));
@@ -47,7 +47,7 @@ public class TenantValuePostProcessorTest {
         final ValidBean bean = new ValidBean();
 
         // when
-        processor.postProcessAfterInitialization(bean, "validBean");
+        processor.postProcessBeforeInitialization(bean, "validBean");
 
         // then
         assertEquals("Tenant value", bean.getValue());
@@ -59,14 +59,14 @@ public class TenantValuePostProcessorTest {
         final InvalidBean bean = new InvalidBean();
 
         // when
-        processor.postProcessAfterInitialization(bean, "invalidBean");
+        processor.postProcessBeforeInitialization(bean, "invalidBean");
     }
 
     @Test
     public void shouldNotModifyInBeforeInitialization() {
         // when
         final ValidBean bean = new ValidBean();
-        Object beforeInit = processor.postProcessBeforeInitialization(bean, "validName");
+        Object beforeInit = processor.postProcessAfterInitialization(bean, "validName");
 
         // then
         assertSame(beforeInit, bean);
