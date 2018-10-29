@@ -36,7 +36,7 @@ public class EtcdPropertySourceTest {
 
     @Before
     public void setUp() {
-        propertySource = new EtcdPropertySource("default-name", client);
+        propertySource = new EtcdPropertySource("default-name", "app", client);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class EtcdPropertySourceTest {
         // given
         final KV kv = mock(KV.class);
         when(client.getKVClient()).thenReturn(kv);
-        when(kv.get(eq(ByteSequence.from("testKey", Charset.forName("UTF-8")))))
+        when(kv.get(eq(ByteSequence.from("/app/testKey", Charset.forName("UTF-8")))))
                 .thenReturn(new CompletableFuture<GetResponse>() {
 
                     @Override
