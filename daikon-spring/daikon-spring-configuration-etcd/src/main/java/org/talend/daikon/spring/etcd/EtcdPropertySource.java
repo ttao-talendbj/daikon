@@ -7,6 +7,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.core.env.PropertySource;
 import org.springframework.lang.Nullable;
+import org.talend.daikon.exception.TalendRuntimeException;
+import org.talend.daikon.exception.error.CommonErrorCodes;
 
 import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
@@ -44,8 +46,7 @@ public class EtcdPropertySource extends PropertySource<Client> {
                 return null;
             }
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return null;
+            throw new TalendRuntimeException(CommonErrorCodes.UNEXPECTED_EXCEPTION, e);
         }
     }
 }
