@@ -31,7 +31,7 @@ public class TenantValuePostProcessorTest {
         final Environment environment = mock(Environment.class);
         when(context.getBean(eq(Environment.class))).thenReturn(environment);
 
-        when(environment.getProperty("tenant-1234/value")).thenReturn("Tenant value");
+        when(environment.getProperty("tenant-1234/tenantSpecificText")).thenReturn("Tenant value");
 
         final TenancyContext tenancyContext = TenancyContextHolder.createEmptyContext();
         tenancyContext.setTenant(new DefaultTenant("tenant-1234", null));
@@ -74,7 +74,7 @@ public class TenantValuePostProcessorTest {
 
     private static class ValidBean {
 
-        @TenantValue("${value}")
+        @TenantValue("${tenantSpecificText}")
         private String value;
 
         String getValue() {
@@ -84,7 +84,7 @@ public class TenantValuePostProcessorTest {
 
     private static class InvalidBean {
 
-        @TenantValue("${value}")
+        @TenantValue("${tenantSpecificText}")
         private String value;
 
         String getValue() {
