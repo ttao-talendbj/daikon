@@ -65,9 +65,9 @@ public class TenantValuePostProcessor implements BeanPostProcessor, ApplicationC
                     final Object value = HELPER.replacePlaceholders(annotation.value(), placeholderName -> {
                         final Tenant tenant = TenancyContextHolder.getContext().getTenant();
                         final String tenantId = String.valueOf(tenant.getIdentity());
-                        final String configurationKey = tenantId + "/" + placeholderName;
-
                         LOGGER.debug("Looking for configuration key '{}' for tenant '{}'", placeholderName, tenantId);
+
+                        final String configurationKey = tenantId + "/" + placeholderName;
                         LOGGER.debug("Resolved tenant configuration key '{}'", configurationKey);
 
                         return environment.getProperty(configurationKey);
