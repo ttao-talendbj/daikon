@@ -3,7 +3,6 @@ package org.talend.daikon.content;
 import static java.util.Arrays.stream;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
@@ -22,8 +21,7 @@ public abstract class AbstractResourceResolver implements ResourceResolver {
         final Resource[] resources = delegate.getResources(locationPattern);
         return stream(resources) //
                 .map(resource -> convert((WritableResource) resource)) //
-                .collect(Collectors.toList()) //
-                .toArray(new DeletableResource[0]);
+                .toArray(DeletableResource[]::new);
     }
 
     @Override

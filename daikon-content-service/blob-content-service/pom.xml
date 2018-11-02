@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>daikon-content-service</artifactId>
+        <groupId>org.talend.daikon</groupId>
+        <version>0.29.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>blob-content-service</artifactId>
+
+    <properties>
+        <spring-cloud-azure-storage.version>1.0.0.M2</spring-cloud-azure-storage.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.talend.daikon</groupId>
+            <artifactId>content-service-common</artifactId>
+            <classifier>lib</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>spring-cloud-azure-storage</artifactId>
+            <version>${spring-cloud-azure-storage.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
