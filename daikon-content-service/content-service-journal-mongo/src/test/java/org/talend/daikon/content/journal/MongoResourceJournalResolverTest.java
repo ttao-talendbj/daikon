@@ -34,6 +34,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
+import org.talend.daikon.content.journal.mongodb.MongoResourceJournalRepository;
+import org.talend.daikon.content.journal.mongodb.MongoResourceJournalResolver;
+import org.talend.daikon.content.journal.mongodb.ResourceJournalEntry;
 
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;

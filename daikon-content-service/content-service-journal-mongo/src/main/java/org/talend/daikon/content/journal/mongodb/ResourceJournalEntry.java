@@ -1,4 +1,4 @@
-package org.talend.daikon.content.journal;
+package org.talend.daikon.content.journal.mongodb;
 
 import org.springframework.data.annotation.Id;
 

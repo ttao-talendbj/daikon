@@ -17,6 +17,7 @@
         <module>s3-content-service</module>
         <module>local-content-service</module>
         <module>blob-content-service</module>
+        <module>content-service-journal-jpa</module>
     </modules>
     <dependencyManagement>
         <dependencies>

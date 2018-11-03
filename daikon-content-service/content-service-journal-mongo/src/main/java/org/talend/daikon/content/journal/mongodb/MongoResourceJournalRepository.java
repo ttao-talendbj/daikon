@@ -1,4 +1,4 @@
-package org.talend.daikon.content.journal;
+package org.talend.daikon.content.journal.mongodb;
 
 import java.util.List;
 

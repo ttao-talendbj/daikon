@@ -1,4 +1,4 @@
-package org.talend.daikon.content.journal;
+package org.talend.daikon.content.journal.mongodb;
 
 import static org.springframework.data.mongodb.core.query.Criteria.byExample;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
