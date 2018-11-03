@@ -16,6 +16,7 @@ public interface DeletableResource extends WritableResource {
 
     /**
      * Move given resource to the <code>location</code> given as parameter.
+     * 
      * @param location The new location for the resource
      */
     void move(String location) throws IOException;

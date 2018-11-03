@@ -35,7 +35,7 @@ public abstract class DeletableResourceTest extends DeletableLoaderResourceTests
 
     @Test
     public void shouldDelete() throws Exception {
-        //given
+        // given
         assertTrue(resource.exists());
         // when
         resource.delete();
@@ -83,7 +83,6 @@ public abstract class DeletableResourceTest extends DeletableLoaderResourceTests
     }
 
     public abstract String getURIScheme();
-
 
     @Test
     public abstract void shouldGetFile() throws Exception;

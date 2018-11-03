@@ -3,8 +3,8 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>daikon-content-service</artifactId>
         <groupId>org.talend.daikon</groupId>
+        <artifactId>daikon-content-service</artifactId>
         <version>0.29.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -20,6 +20,7 @@
             <groupId>org.talend.daikon</groupId>
             <artifactId>content-service-common</artifactId>
             <classifier>lib</classifier>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

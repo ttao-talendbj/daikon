@@ -4,7 +4,7 @@ http://www.talend.com
 
 ![alt text](https://www.talend.com/wp-content/uploads/2016/07/talend-logo.png "Talend")
 
-This module contains the source files for a local file system support.
+This module contains the source files for a S3 support.
 
 ## Usage
 
@@ -13,7 +13,7 @@ This module contains the source files for a local file system support.
 <dependency>
    <groupId>org.talend.daikon</groupId>
    <artifactId>s3-content-service</artifactId>
-   <version>0.16.0-SNAPSHOT</version>
+   <version>latest daikon version</version>
 </dependency>
 ```
 Doing so will bring all needed dependencies.

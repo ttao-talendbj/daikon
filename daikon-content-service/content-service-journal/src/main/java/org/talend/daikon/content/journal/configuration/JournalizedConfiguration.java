@@ -21,6 +21,7 @@ public class JournalizedConfiguration implements ApplicationContextAware {
     @Bean
     public BeanPostProcessor journalized() {
         return new BeanPostProcessor() {
+
             @Override
             public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
                 return bean;
@@ -53,6 +54,7 @@ public class JournalizedConfiguration implements ApplicationContextAware {
     }
 
     class MissingJournalBean extends RuntimeException {
+
         MissingJournalBean(Exception e) {
             super(e);
         }

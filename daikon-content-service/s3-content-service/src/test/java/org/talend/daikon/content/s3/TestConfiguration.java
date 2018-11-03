@@ -41,6 +41,7 @@ public class TestConfiguration implements InitializingBean, DisposableBean {
     @Bean
     public S3BucketProvider s3BucketProvider() {
         return new S3BucketProvider() {
+
             @Override
             public String getBucketName() {
                 if (clientNumber.get() == 0) {

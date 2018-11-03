@@ -1,12 +1,12 @@
 package org.talend.daikon.content.journal;
 
+import java.io.IOException;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
-
-import java.io.IOException;
-import java.util.stream.Stream;
 
 public class JournalizedResourceResolver implements ResourceResolver {
 

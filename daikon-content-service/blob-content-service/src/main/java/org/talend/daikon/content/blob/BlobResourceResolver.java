@@ -84,6 +84,7 @@ public class BlobResourceResolver extends AbstractResourceResolver {
     private static class BlobDeletableResource implements DeletableResource {
 
         private final WritableResource delegate;
+
         private CloudBlobClient blobClient;
 
         private BlobDeletableResource(CloudBlobClient blobClient, WritableResource delegate) {

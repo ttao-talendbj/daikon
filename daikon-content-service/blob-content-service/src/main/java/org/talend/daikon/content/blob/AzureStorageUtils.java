@@ -5,6 +5,7 @@ import org.springframework.util.Assert;
 final class AzureStorageUtils {
 
     private static final String BLOB_PROTOCOL_PREFIX = "blob://";
+
     private static final String PATH_DELIMITER = "/";
 
     private AzureStorageUtils() {
@@ -35,8 +36,7 @@ final class AzureStorageUtils {
 
     private static void assertIsAzureStorageLocation(String location) {
         if (!isAzureStorageResource(location)) {
-            throw new IllegalArgumentException(
-                    String.format("The location '%s' is not a valid Azure blob location", location));
+            throw new IllegalArgumentException(String.format("The location '%s' is not a valid Azure blob location", location));
         }
     }
 

@@ -144,7 +144,8 @@ class S3DeletableResource implements DeletableResource {
     }
 
     /**
-     * An {@link OutputStream} implementation that prevents errors in case someone calls {@link #write(int)} <b>after</b> close
+     * An {@link OutputStream} implementation that prevents errors in case someone calls {@link #write(int)}
+     * <b>after</b> close
      * (seems to happen with Apache POI when writing Excel files).
      */
     private static class CloseLenientOutputStream extends OutputStream {

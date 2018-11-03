@@ -102,6 +102,7 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
         } else {
             final String staticBucketName = environment.getProperty("content-service.store.s3.bucket", String.class);
             final S3BucketProvider provider = new S3BucketProvider() {
+
                 @Override
                 public String getBucketName() {
                     return staticBucketName;
