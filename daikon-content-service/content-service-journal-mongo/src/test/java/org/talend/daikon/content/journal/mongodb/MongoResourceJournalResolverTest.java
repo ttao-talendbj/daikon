@@ -1,4 +1,4 @@
-package org.talend.daikon.content.journal;
+package org.talend.daikon.content.journal.mongodb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,9 +34,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
-import org.talend.daikon.content.journal.mongodb.MongoResourceJournalRepository;
-import org.talend.daikon.content.journal.mongodb.MongoResourceJournalResolver;
-import org.talend.daikon.content.journal.mongodb.ResourceJournalEntry;
+import org.talend.daikon.content.journal.ResourceJournal;
 
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
@@ -47,7 +45,7 @@ import com.mongodb.MongoClient;
 public class MongoResourceJournalResolverTest {
 
     @Autowired
-    private MongoResourceJournalResolver resolver;
+    private ResourceJournal resolver;
 
     /**
      * Spring MongoDB template.
@@ -58,7 +56,7 @@ public class MongoResourceJournalResolverTest {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Value("${mongo.resource.journal.collection:resourceJournalEntry}")
+    @Value("${mongodb.resource.journal.collection:resourceJournalEntry}")
     private String collectionName;
 
     @Test

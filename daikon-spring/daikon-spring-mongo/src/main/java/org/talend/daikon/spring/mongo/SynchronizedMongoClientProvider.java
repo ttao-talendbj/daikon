@@ -1,15 +1,16 @@
 package org.talend.daikon.spring.mongo;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 /**
  * A {@link MongoClientProvider} implementation that provides thread safety around the
@@ -53,7 +54,7 @@ public class SynchronizedMongoClientProvider implements MongoClientProvider {
                 concurrentOpens.remove(databaseURI);
             }
         } else {
-            LOGGER.trace("Not closing mongo clients ({} remain in use for database '{}')", openCount, databaseURI == null ? "N/A" : databaseURI);
+            LOGGER.trace("Not closing mongodb clients ({} remain in use for database '{}')", openCount, databaseURI == null ? "N/A" : databaseURI);
         }
     }
 

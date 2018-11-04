@@ -1,17 +1,17 @@
 package org.talend.daikon.spring.mongo;
 
-import com.mongodb.MongoClientURI;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.mongodb.MongoClientURI;
 
 @Configuration
 public class TestMultiTenantConfiguration {
@@ -46,7 +46,7 @@ public class TestMultiTenantConfiguration {
         return new MongoTemplate(factory);
     }
 
-    // A fake mongo for tests
+    // A fake mongodb for tests
     @Bean
     public Fongo fongo() {
         return new Fongo("MongoDB");

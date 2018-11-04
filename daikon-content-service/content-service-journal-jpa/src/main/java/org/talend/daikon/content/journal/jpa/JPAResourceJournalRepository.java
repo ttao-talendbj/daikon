@@ -15,7 +15,7 @@ public interface JPAResourceJournalRepository extends CrudRepository<ResourceJou
 
     void deleteByNameStartsWith(String name);
 
-    String save(ResourceJournalEntry resourceJournalEntry);
+    ResourceJournalEntry save(ResourceJournalEntry resourceJournalEntry);
 
     ResourceJournalEntry findOne(Example<ResourceJournalEntry> of);
 

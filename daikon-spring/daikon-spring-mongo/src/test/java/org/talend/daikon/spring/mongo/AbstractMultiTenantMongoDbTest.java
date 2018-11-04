@@ -1,6 +1,10 @@
 package org.talend.daikon.spring.mongo;
 
-import com.github.fakemongo.Fongo;
+import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
+
+import java.io.IOException;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +13,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.util.List;
-
-import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
+import com.github.fakemongo.Fongo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @EnableMongoRepositories
-@ComponentScan("org.talend.daikon.spring.mongo")
+@ComponentScan("org.talend.daikon.spring.mongodb")
 @ContextConfiguration(classes = MultiTenantMongoDbFactoryTest.class)
 public abstract class AbstractMultiTenantMongoDbTest {
 
@@ -38,7 +39,7 @@ public abstract class AbstractMultiTenantMongoDbTest {
         }
         // Switch back to default tenant
         changeTenant("default");
-        // Clean up mongo clients
+        // Clean up mongodb clients
         mongoClientProvider.close();
     }
 }

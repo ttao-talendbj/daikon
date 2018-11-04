@@ -1,16 +1,17 @@
 package org.talend.daikon.spring.mongo;
 
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * An implementation of {@link MongoClientProvider} that has automatic client clean up after a time period.
@@ -25,7 +26,7 @@ public class CachedMongoClientProvider implements MongoClientProvider {
      * Creates an instance with <code>concurrencyLevel = 100</code> and <code>maximumSize = 100</code>.
      * 
      * @param duration The time after which a cache entry is removed if cache entry wasn't accessed for this time. For
-     * example, 10 minutes means any cached mongo client not used within the last 10 minutes will be removed.
+     * example, 10 minutes means any cached mongodb client not used within the last 10 minutes will be removed.
      * @param unit The time unit for <code>duration</code>.
      */
     public CachedMongoClientProvider(int duration, TimeUnit unit) {
@@ -35,9 +36,9 @@ public class CachedMongoClientProvider implements MongoClientProvider {
     /**
      *
      * @param duration The time after which a cache entry is removed if cache entry wasn't accessed for this time. For
-     * example, 10 minutes means any cached mongo client not used within the last 10 minutes will be removed.
+     * example, 10 minutes means any cached mongodb client not used within the last 10 minutes will be removed.
      * @param unit The time unit for <code>duration</code>.
-     * @param concurrencyLevel Max number of concurrent access to a cached mongo client (see {@link CacheBuilder#concurrencyLevel}).
+     * @param concurrencyLevel Max number of concurrent access to a cached mongodb client (see {@link CacheBuilder#concurrencyLevel}).
      * @param maximumSize Max size for the cache (see {@link CacheBuilder#maximumSize}).
      */
     public CachedMongoClientProvider(int duration, TimeUnit unit, int concurrencyLevel, int maximumSize) {
@@ -54,7 +55,7 @@ public class CachedMongoClientProvider implements MongoClientProvider {
 
             public MongoClient load(MongoClientURI uri) throws Exception {
                 try {
-                    LOGGER.debug("Adding new mongo client for '{}'.", uri);
+                    LOGGER.debug("Adding new mongodb client for '{}'.", uri);
                     return new MongoClient(uri);
                 } catch (Exception e) {
                     // 3.x client throws UnknownHostException, keep catch block for compatibility with 3.x version

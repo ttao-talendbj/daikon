@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MongoResourceJournalRepositoryImpl implements MongoResourceJournalRepository {
 
-    @Value("${mongo.resource.journal.collection:resourceJournalEntry}")
+    @Value("${mongodb.resource.journal.collection:resourceJournalEntry}")
     private String collectionName;
 
     @Autowired

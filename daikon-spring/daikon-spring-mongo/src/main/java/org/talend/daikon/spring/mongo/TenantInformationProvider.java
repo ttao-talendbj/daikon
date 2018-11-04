@@ -23,7 +23,7 @@ public interface TenantInformationProvider {
     String getDatabaseName();
 
     /**
-     * @return A {@link MongoClientURI} object that describes where the mongo db host is.
+     * @return A {@link MongoClientURI} object that describes where the mongodb db host is.
      */
     MongoClientURI getDatabaseURI();
 }
