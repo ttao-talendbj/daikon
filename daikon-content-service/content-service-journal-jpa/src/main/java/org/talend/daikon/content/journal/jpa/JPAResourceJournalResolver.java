@@ -4,9 +4,11 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Component;
 import org.talend.daikon.content.ResourceResolver;
 import org.talend.daikon.content.journal.ResourceJournal;
 
+@Component
 @EnableJpaRepositories
 public class JPAResourceJournalResolver implements ResourceJournal {
 

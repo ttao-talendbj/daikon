@@ -24,18 +24,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
-import org.talend.daikon.content.journal.ResourceJournal;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = JPAResourceJournalResolver.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class JPAResourceJournalResolverTest {
 
     @Autowired
-    private ResourceJournal resolver;
+    private JPAResourceJournalResolver resolver;
 
     @Autowired
     private JPAResourceJournalRepository repository;
