@@ -2,10 +2,11 @@ package org.talend.daikon.content.journal.jpa;
 
 import java.util.List;
 
-import org.springframework.data.domain.Example;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface JPAResourceJournalRepository extends CrudRepository<ResourceJournalEntry, String> {
+@Repository
+public interface JPAResourceJournalRepository extends JpaRepository<ResourceJournalEntry, String> {
 
     List<ResourceJournalEntry> findByNameStartsWith(String name);
 
@@ -14,10 +15,6 @@ public interface JPAResourceJournalRepository extends CrudRepository<ResourceJou
     void deleteByName(String name);
 
     void deleteByNameStartsWith(String name);
-
-    ResourceJournalEntry save(ResourceJournalEntry resourceJournalEntry);
-
-    ResourceJournalEntry findOne(Example<ResourceJournalEntry> of);
 
     boolean exists(String journalReadyMarker);
 }

@@ -8,17 +8,17 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.github.fakemongo.Fongo;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@EnableMongoRepositories
-@ComponentScan("org.talend.daikon.spring.mongodb")
-@ContextConfiguration(classes = MultiTenantMongoDbFactoryTest.class)
+@RunWith(SpringRunner.class)
+@DataMongoTest
+@ComponentScan("org.talend.daikon.spring.mongo")
+@ContextConfiguration(classes = TestMultiTenantConfiguration.class)
 public abstract class AbstractMultiTenantMongoDbTest {
 
     @Autowired

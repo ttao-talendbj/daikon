@@ -3,8 +3,9 @@ package org.talend.daikon.spring.mongo;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -13,7 +14,8 @@ import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-@Configuration
+@SpringBootConfiguration
+@AutoConfigurationPackage
 public class TestMultiTenantConfiguration {
 
     private static final ThreadLocal<String> dataBaseName = ThreadLocal.withInitial(() -> "default");
@@ -58,9 +60,10 @@ public class TestMultiTenantConfiguration {
     @Bean
     public TenantInformationProvider tenantProvider() {
         return new TenantInformationProvider() {
+
             @Override
             public String getDatabaseName() {
-                if("failure".equals(dataBaseName.get())) {
+                if ("failure".equals(dataBaseName.get())) {
                     throw new RuntimeException("On purpose thrown exception.");
                 }
                 return dataBaseName.get();

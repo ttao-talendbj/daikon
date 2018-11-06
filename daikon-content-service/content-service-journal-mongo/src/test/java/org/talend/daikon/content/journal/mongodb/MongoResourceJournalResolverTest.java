@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
 import org.talend.daikon.content.journal.ResourceJournal;
@@ -39,9 +39,9 @@ import org.talend.daikon.content.journal.ResourceJournal;
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@DataMongoTest
+@RunWith(SpringRunner.class)
 @ContextConfiguration
+@DataMongoTest
 public class MongoResourceJournalResolverTest {
 
     @Autowired

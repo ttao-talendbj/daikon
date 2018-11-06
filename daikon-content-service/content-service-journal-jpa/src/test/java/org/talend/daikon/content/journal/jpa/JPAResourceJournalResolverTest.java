@@ -24,13 +24,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = JPAResourceJournalResolver.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ContextConfiguration(classes = {JPAResourceJournalResolver.class, JPAResourceJournalRepository.class, ResourceJournalEntry.class})
+@DataJpaTest
 public class JPAResourceJournalResolverTest {
 
     @Autowired
