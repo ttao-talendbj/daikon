@@ -10,9 +10,14 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.Resource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.DeletableResourceTest;
 
+@ContextConfiguration(classes = { S3ContentServiceConfiguration.class, TestConfiguration.class })
+@TestPropertySource(properties = { "content-service.store=s3", "content-service.store.s3.authentication=custom",
+        "multi-tenancy.s3.active=true" })
 public class S3DeletableResourceTest extends DeletableResourceTest {
 
     @Override

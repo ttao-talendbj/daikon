@@ -1,10 +1,14 @@
 package org.talend.daikon.content.local;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.talend.daikon.content.DeletableResourceTest;
 
+@ContextConfiguration(classes = LocalContentServiceConfiguration.class)
 @TestPropertySource(properties = { "content-service.store=local", "content-service.store.local.path=${java.io.tmpdir}/dataprep" })
 public class LocalDeletableResourceTest extends DeletableResourceTest {
 

@@ -1,6 +1,5 @@
 package org.talend.daikon.content.journal.jpa;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +30,8 @@ import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {JPAResourceJournalResolver.class, JPAResourceJournalRepository.class, ResourceJournalEntry.class})
+@ContextConfiguration(classes = { JPAResourceJournalResolver.class, JPAResourceJournalRepository.class,
+        ResourceJournalEntry.class })
 @DataJpaTest
 public class JPAResourceJournalResolverTest {
 
