@@ -52,6 +52,9 @@ public class JPAResourceJournalResolver implements ResourceJournal {
 
     @Override
     public Stream<String> matches(String pattern) {
+        if ("/**".equals(pattern)) {
+            return repository.findAll().stream().map(ResourceJournalEntry::getName);
+        }
         if (StringUtils.isBlank(pattern)) {
             return Stream.empty();
         }

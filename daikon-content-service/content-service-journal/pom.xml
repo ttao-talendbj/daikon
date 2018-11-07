@@ -39,6 +39,10 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>javax.transaction-api</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

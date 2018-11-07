@@ -14,10 +14,10 @@
         <module>content-service-common</module>
         <module>content-service-journal</module>
         <module>content-service-journal-mongo</module>
+        <module>content-service-journal-jpa</module>
         <module>s3-content-service</module>
         <module>local-content-service</module>
         <module>blob-content-service</module>
-        <module>content-service-journal-jpa</module>
     </modules>
     <dependencyManagement>
         <dependencies>
