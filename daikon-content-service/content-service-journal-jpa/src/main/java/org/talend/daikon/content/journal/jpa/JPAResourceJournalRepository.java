@@ -16,5 +16,4 @@ public interface JPAResourceJournalRepository extends JpaRepository<ResourceJour
 
     void deleteByNameStartsWith(String name);
 
-    boolean exists(String journalReadyMarker);
 }

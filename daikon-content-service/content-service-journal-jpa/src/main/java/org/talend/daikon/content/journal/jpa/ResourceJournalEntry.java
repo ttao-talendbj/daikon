@@ -12,6 +12,9 @@ public class ResourceJournalEntry {
     @Id
     private String name;
 
+    public ResourceJournalEntry() {
+    }
+
     public ResourceJournalEntry(String name) {
         this.name = name;
     }

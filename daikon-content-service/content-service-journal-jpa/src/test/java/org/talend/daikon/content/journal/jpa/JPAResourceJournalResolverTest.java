@@ -23,15 +23,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
+import org.talend.daikon.content.journal.configuration.JournalizedConfiguration;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { JPAResourceJournalResolver.class, JPAResourceJournalRepository.class,
-        ResourceJournalEntry.class })
+@AutoConfigurationPackage
+@ComponentScan(basePackages = "org.talend.daikon.content")
+@ContextConfiguration(classes = { JournalizedConfiguration.class })
 @DataJpaTest
 public class JPAResourceJournalResolverTest {
 
@@ -198,7 +202,7 @@ public class JPAResourceJournalResolverTest {
         resolver.validate();
 
         // Then
-        assertTrue(repository.exists(JPAResourceJournalResolver.JOURNAL_READY));
+        assertTrue(repository.existsById(JPAResourceJournalResolver.JOURNAL_READY));
     }
 
     @Test
@@ -207,13 +211,13 @@ public class JPAResourceJournalResolverTest {
         resolver.validate();
 
         // Then
-        assertTrue(repository.exists(JPAResourceJournalResolver.JOURNAL_READY));
+        assertTrue(repository.existsById(JPAResourceJournalResolver.JOURNAL_READY));
 
         // When
         resolver.invalidate();
 
         // Then
-        assertFalse(repository.exists(JPAResourceJournalResolver.JOURNAL_READY));
+        assertFalse(repository.existsById(JPAResourceJournalResolver.JOURNAL_READY));
     }
 
     @Test
@@ -231,7 +235,7 @@ public class JPAResourceJournalResolverTest {
         verify(resourceResolver, times(1)).getResources(eq("/**"));
         verify(resource1, times(1)).getFilename();
         verify(resource2, times(1)).getFilename();
-        assertTrue(repository.exists(JPAResourceJournalResolver.JOURNAL_READY));
+        assertTrue(repository.existsById(JPAResourceJournalResolver.JOURNAL_READY));
     }
 
     @Test
@@ -249,11 +253,11 @@ public class JPAResourceJournalResolverTest {
         }
 
         // Then
-        assertFalse(repository.exists(JPAResourceJournalResolver.JOURNAL_READY));
+        assertFalse(repository.existsById(JPAResourceJournalResolver.JOURNAL_READY));
     }
 
     @Test
-    public void shouldIgnoreIfAlreadyMarkedAsReady() throws IOException, InterruptedException {
+    public void shouldIgnoreIfAlreadyMarkedAsReady() throws IOException {
         // Given
         final ResourceResolver resourceResolver = mock(ResourceResolver.class);
         when(resourceResolver.getResources(any())).thenThrow(new IOException("Unchecked on purpose"));
