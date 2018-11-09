@@ -16,6 +16,8 @@ import org.talend.tqlmongo.excp.TqlMongoException;
  */
 public class ASTVisitor implements IASTVisitor<Object> {
 
+    public static final String MONGO_ESCAPE_PATTERN = "[\\.\\^\\$\\*\\+\\?\\(\\)\\[\\{\\\\\\|]";
+
     private boolean isNegation = false;
 
     @Override
@@ -69,8 +71,8 @@ public class ASTVisitor implements IASTVisitor<Object> {
         if (criteria.size() == 1)
             return criteria.get(0);
         if (!isNegation)
-            return new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()]));
-        return new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()]));
+            return new Criteria().andOperator(criteria.toArray(new Criteria[0]));
+        return new Criteria().orOperator(criteria.toArray(new Criteria[0]));
     }
 
     @Override
@@ -86,8 +88,8 @@ public class ASTVisitor implements IASTVisitor<Object> {
         if (criteria.size() == 1)
             return criteria.get(0);
         if (!isNegation)
-            return new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()]));
-        return new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()]));
+            return new Criteria().orOperator(criteria.toArray(new Criteria[0]));
+        return new Criteria().andOperator(criteria.toArray(new Criteria[0]));
     }
 
     @Override
@@ -201,9 +203,11 @@ public class ASTVisitor implements IASTVisitor<Object> {
     public Object visit(FieldContainsExpression elt) {
         String fieldName = (String) elt.getField().accept(this);
         String value = elt.getValue();
+        String regex = value.replaceAll(MONGO_ESCAPE_PATTERN, "\\\\$0");
+
         if (!isNegation)
-            return Criteria.where(fieldName).regex(value);
-        return Criteria.where(fieldName).not().regex(value);
+            return Criteria.where(fieldName).regex(regex);
+        return Criteria.where(fieldName).not().regex(regex);
     }
 
     @Override
@@ -275,7 +279,7 @@ public class ASTVisitor implements IASTVisitor<Object> {
                 break;
             default:
                 // Special characters for PCRE syntax (used by mongoDB for regex) need to be escaped.
-                sb.append(String.valueOf(c).replaceAll("[\\.\\^\\$\\*\\+\\?\\(\\)\\[\\{\\\\\\|]", "\\\\$0"));
+                sb.append(String.valueOf(c).replaceAll(MONGO_ESCAPE_PATTERN, "\\\\$0"));
                 break;
             }
         }
