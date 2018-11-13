@@ -23,5 +23,6 @@
 		<module>logging-kafka-interceptor</module>
         <module>logging-spring-security</module>
         <module>logging-http-headers</module>
+        <module>logging-obfuscation</module>
     </modules>
 </project>
