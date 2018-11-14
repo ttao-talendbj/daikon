@@ -43,10 +43,6 @@ import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
 public class ObfuscatedLoggerTest {
 
-    @BeforeClass
-    static public void staticInit() {
-        System.setProperty(OBFUSCATION_KEY_PROPERTY, "sdfjazoirzajhfnf1232qsd");
-    }
 
     @Test
     public void traceMethods() {
@@ -244,10 +240,23 @@ public class ObfuscatedLoggerTest {
     }
 
     @Test
-    public void obfuscate() throws UnsupportedEncodingException {
-        ObfuscatedLogger obfuscateLogger = new ObfuscatedLogger(null);
-        assertThat(obfuscateLogger.obfuscate("foo"), is("If1wuKzm4+FlGv0LvoAYuruT/FsXotoo0rC8TxQZ1bY="));
+    public void obfuscate()  {
+        System.setProperty(OBFUSCATION_KEY_PROPERTY, "sdfjazoirzajhfnf1232qsd");
+        try {
+            ObfuscatedLogger obfuscateLogger = new ObfuscatedLogger(null);
+            assertThat(obfuscateLogger.obfuscate("foo"), is("If1wuKzm4+FlGv0LvoAYuruT/FsXotoo0rC8TxQZ1bY="));
+        }finally {
+            System.clearProperty(OBFUSCATION_KEY_PROPERTY);
+        }
     }
+
+    @Test
+    public void obfuscateNoKey()  {
+        ObfuscatedLogger obfuscateLogger = new ObfuscatedLogger(null);
+        assertThat(obfuscateLogger.obfuscate("foo"), is(ObfuscatedLogger.DEFAULT_RESULT));
+    }
+
+
 
     private static class TestMarker implements Marker {
 

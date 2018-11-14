@@ -38,34 +38,18 @@ import org.slf4j.Marker;
 public class ObfuscatedLogger {
 
     public static final String OBFUSCATION_KEY_PROPERTY = "talend.log.obfuscation.key";
+    public static final String DEFAULT_RESULT= "<hidden>";
 
     static final private Logger log = LoggerFactory.getLogger(ObfuscatedLogger.class);
 
     private final Logger delegate;
 
-    private static Mac sha256_HMAC;
+    private Mac mac;
 
-    static {
-        try {
-            String obfuscationKey = System.getProperty(OBFUSCATION_KEY_PROPERTY, null);
-            if (obfuscationKey != null) {
-                sha256_HMAC = Mac.getInstance("HmacSHA256");
-                SecretKeySpec secret_key = new SecretKeySpec(obfuscationKey.getBytes("UTF-8"), "HmacSHA256");
-                sha256_HMAC.init(secret_key);
-            } // else sha256_HMAC remains null
-        } catch (NoSuchAlgorithmException e) {
-            log.error("Failed to initialize the obfuscation engine :", e);
-        } catch (InvalidKeyException e) {
-            // the key is not logged on purpose to not leak it.
-            log.error("Failed to initialize the obfuscation engine (Invalid Key)");
-        } catch (UnsupportedEncodingException e) {
-            // the key is not logged on purpose to not leak it.
-            log.error("Failed to initialize the obfuscation engine: UTF-8 is not a supported encoding !!");
-        }
-    }
 
     public ObfuscatedLogger(Logger logger) {
         this.delegate = logger;
+        mac = createSHA256HMAC();
     }
 
     /**
@@ -636,7 +620,7 @@ public class ObfuscatedLogger {
         if (arg == null) {
             return null;
         }
-        return encode(arg.toString());
+        return encode(mac, arg.toString());
     }
 
     String[] obfuscate(Object... args) {
@@ -647,24 +631,54 @@ public class ObfuscatedLogger {
         return obfuscated;
     }
 
+
+
     /**
      * encodes the data using hmac sha256 and encodes it using base64
-     * 
-     * @param data, to be encoded
-     * @return base64 string of the hmac sha256 encoded data
+     *
+     * @param mac used for hashing the data, if null then DEFAULT_RESULT is returned
+     * @param data the data to be hashed
+     * @return base64 string of the hmac sha256 encoded data or DEFAULT_RESULT if mac is null or an error occured
      */
-    public static String encode(String data) {
-        if (sha256_HMAC == null) {
-            return "<hidden>";
+    public static String encode(Mac mac, String data) {
+        if (mac == null) {
+            return DEFAULT_RESULT;
         } else {
             try {
-                return Base64.getEncoder().encodeToString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
+                return Base64.getEncoder().encodeToString(mac.doFinal(data.getBytes("UTF-8")));
             } catch (UnsupportedEncodingException e) {
-                // should never happend
+                // should never happened
                 log.error("Failed to obfuscate data due to a :  UTF-8 is not a supported encoding !! ");
-                return "<hidden>";
+                return DEFAULT_RESULT;
             }
         }
     }
+
+    /**
+     *
+     * @return a hmac instance to obfuscate data, it uses the SHA256 algorithm or null if any error occured. I uses the system property OBFUSCATION_KEY_PROPERTY to get the hash key
+     */
+    public static Mac createSHA256HMAC() {
+        Mac sha256_HMAC = null;
+        try {
+            String obfuscationKey = System.getProperty(OBFUSCATION_KEY_PROPERTY, null);
+            if (obfuscationKey != null) {
+                sha256_HMAC = Mac.getInstance("HmacSHA256");
+                SecretKeySpec secret_key = new SecretKeySpec(obfuscationKey.getBytes("UTF-8"), "HmacSHA256");
+                sha256_HMAC.init(secret_key);
+            } // else sha256_HMAC remains null
+        } catch (NoSuchAlgorithmException e) {
+            log.error("Failed to initialize the obfuscation engine :", e);
+        } catch (InvalidKeyException e) {
+            // the key is not logged on purpose to not leak it.
+            log.error("Failed to initialize the obfuscation engine (Invalid Key)");
+        } catch (UnsupportedEncodingException e) {
+            // the key is not logged on purpose to not leak it.
+            log.error("Failed to initialize the obfuscation engine: UTF-8 is not a supported encoding !!");
+        }
+        return sha256_HMAC;
+    }
+
+
 
 }
