@@ -79,9 +79,9 @@ In this case you are required to provide an implementation of `org.talend.daikon
 
 `S3BucketProvider` needs to implement two methods: one returns the S3 bucket name, the other the root directory for the tenant (might be empty string if all data is to be stored at root level of the S3 bucket).
 
-### Minio support
+### Custom endpoint support
 
-Content service also provides support for [Minio](https://www.minio.io). To activate it, simply add:
+You may customize S3 endpoint URL (for [Minio](https://www.minio.io) integration, for example). To activate it, simply add:
 
 ```properties
 content-service.store.s3.endpoint_url=<endpoint url>
