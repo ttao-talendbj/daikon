@@ -14,7 +14,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 @Component
-@ConditionalOnProperty(name = "content-service.store.s3.authentication", value = "MINIO")
+@ConditionalOnProperty(name = "content-service.store.s3.authentication", havingValue = "MINIO")
 public class MinioS3Provider implements AmazonS3Provider {
 
     @Value("${content-service.store.s3.minio.account_name}")
