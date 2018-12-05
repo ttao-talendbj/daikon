@@ -78,3 +78,19 @@ multi-tenancy.s3.active=true
 In this case you are required to provide an implementation of `org.talend.daikon.content.s3.provider.S3BucketProvider` that provide the current bucket name.
 
 `S3BucketProvider` needs to implement two methods: one returns the S3 bucket name, the other the root directory for the tenant (might be empty string if all data is to be stored at root level of the S3 bucket).
+
+### Minio support
+
+Content service also provides support for [Minio](https://www.minio.io). To activate it, simply add:
+
+```properties
+content-service.store.s3.authentication=MINIO
+
+# Mandatory properties below
+content-service.store.s3.minio.account_name=<minio account name>
+content-service.store.s3.minio.account_key=<minio account key>
+content-service.store.s3.minio.endpoint_url=<minio endpoint url>
+
+# Optional region (defaults to "us-east-1")
+content-service.store.s3.minio.region=<region>
+```

@@ -38,6 +38,8 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
 
     private static final String CUSTOM_AUTHENTICATION = "CUSTOM";
 
+    private static final String MINIO_AUTHENTICATION = "MINIO";
+
     private static AmazonS3ClientBuilder configureEC2Authentication(AmazonS3ClientBuilder builder) {
         LOGGER.info("Using EC2 authentication");
         return builder.withCredentials(new EC2ContainerCredentialsProviderWrapper());
@@ -68,6 +70,7 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
         case TOKEN_AUTHENTICATION:
             builder = configureTokenAuthentication(environment, builder);
             break;
+        case MINIO_AUTHENTICATION:
         case CUSTOM_AUTHENTICATION:
             try {
                 final AmazonS3Provider amazonS3Provider = applicationContext.getBean(AmazonS3Provider.class);
