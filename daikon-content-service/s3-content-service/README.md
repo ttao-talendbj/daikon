@@ -84,13 +84,5 @@ In this case you are required to provide an implementation of `org.talend.daikon
 Content service also provides support for [Minio](https://www.minio.io). To activate it, simply add:
 
 ```properties
-content-service.store.s3.authentication=MINIO
-
-# Mandatory properties below
-content-service.store.s3.minio.account_name=<minio account name>
-content-service.store.s3.minio.account_key=<minio account key>
-content-service.store.s3.minio.endpoint_url=<minio endpoint url>
-
-# Optional region (defaults to "us-east-1")
-content-service.store.s3.minio.region=<region>
+content-service.store.s3.endpoint_url=<endpoint url>
 ```

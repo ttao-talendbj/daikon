@@ -21,7 +21,9 @@ import org.talend.daikon.content.s3.provider.S3BucketProvider;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.internal.StaticCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
@@ -45,7 +47,8 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
         return builder.withCredentials(new EC2ContainerCredentialsProviderWrapper());
     }
 
-    private static AmazonS3ClientBuilder configureTokenAuthentication(Environment environment, AmazonS3ClientBuilder builder) {
+    private static AmazonS3ClientBuilder configureTokenAuthentication(Environment environment,
+            AmazonS3ClientBuilder builder) {
         LOGGER.info("Using Token authentication");
         final String key = environment.getProperty("content-service.store.s3.accessKey");
         final String secret = environment.getProperty("content-service.store.s3.secretKey");
@@ -60,8 +63,8 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
     @Bean
     public AmazonS3 amazonS3(Environment environment, ApplicationContext applicationContext) {
         // Configure authentication
-        final String authentication = environment.getProperty("content-service.store.s3.authentication", EC2_AUTHENTICATION)
-                .toUpperCase();
+        final String authentication =
+                environment.getProperty("content-service.store.s3.authentication", EC2_AUTHENTICATION).toUpperCase();
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
         switch (authentication) {
         case EC2_AUTHENTICATION:
@@ -83,9 +86,16 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
         }
 
         // Configure region (optional)
-        final String region = environment.getProperty("content-service.store.s3.region");
-        if (StringUtils.isNotBlank(region)) {
+        final String region = environment.getProperty("content-service.store.s3.region", Regions.US_EAST_1.name());
+        if (environment.containsProperty("content-service.store.s3.region")) {
             builder = builder.withRegion(region);
+        }
+
+        // Configure endpoint url (optional)
+        final String endpointUrl = environment.getProperty("content-service.store.s3.endpoint_url");
+        if (StringUtils.isNotBlank(endpointUrl)) {
+            builder =
+                    builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpointUrl, region));
         }
 
         // All set
@@ -93,8 +103,8 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
     }
 
     @Bean
-    public ResourceResolver s3PathResolver(AmazonS3 amazonS3, Environment environment, ApplicationContext applicationContext,
-            PathMatchingSimpleStorageResourcePatternResolver resolver) {
+    public ResourceResolver s3PathResolver(AmazonS3 amazonS3, Environment environment,
+            ApplicationContext applicationContext, PathMatchingSimpleStorageResourcePatternResolver resolver) {
         if (isMultiTenancyEnabled(environment)) {
             try {
                 final S3BucketProvider s3BucketProvider = applicationContext.getBean(S3BucketProvider.class);
@@ -105,6 +115,7 @@ public class S3ContentServiceConfiguration implements ContentServiceEnabled {
         } else {
             final String staticBucketName = environment.getProperty("content-service.store.s3.bucket", String.class);
             final S3BucketProvider provider = new S3BucketProvider() {
+
                 @Override
                 public String getBucketName() {
                     return staticBucketName;
