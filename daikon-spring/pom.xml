@@ -25,6 +25,5 @@
         <module>daikon-spring-tenancy</module>
         <module>daikon-spring-zipkin</module>
         <module>daikon-spring-configuration</module>
-        <module>daikon-spring-configuration-etcd</module>
     </modules>
 </project>

@@ -44,15 +44,15 @@ public class EtcdPropertySourceTest {
         // given
         final KV kv = mock(KV.class);
         when(client.getKVClient()).thenReturn(kv);
-        when(kv.get(eq(ByteSequence.from("/app/testKey", Charset.forName("UTF-8")))))
+        when(kv.get(eq(ByteSequence.from("/app/testKey", Charset.forName("UTF-8"))))) //
                 .thenReturn(new CompletableFuture<GetResponse>() {
 
                     @Override
-                    public GetResponse get() {
+                    public GetResponse get() { //
                         final GetResponse response = mock(GetResponse.class);
-                        final io.etcd.jetcd.api.KeyValue value = io.etcd.jetcd.api.KeyValue
-                                .newBuilder()
-                                .setValue(ByteString.copyFromUtf8("value"))
+                        final io.etcd.jetcd.api.KeyValue value = io.etcd.jetcd.api.KeyValue //
+                                .newBuilder() //
+                                .setValue(ByteString.copyFromUtf8("value")) //
                                 .build();
                         when(response.getKvs()).thenReturn(Collections.singletonList(new KeyValue(value)));
                         return response;

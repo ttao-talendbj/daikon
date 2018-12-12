@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>daikon-spring</artifactId>
-        <groupId>org.talend.daikon</groupId>
-        <version>0.29.0-SNAPSHOT</version>
+        <artifactId>daikon-spring-configuration</artifactId>
+        <groupId>daikon-spring-configuration</groupId>
+        <version>0.30.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,7 @@
         <jetcd-version>0.3.0-SNAPSHOT</jetcd-version>
     </properties>
 
-    <artifactId>daikon-spring-configuration-etcd</artifactId>
+    <artifactId>etcd</artifactId>
     <dependencies>
         <dependency>
             <groupId>io.etcd</groupId>
@@ -47,6 +47,12 @@
             <artifactId>mockito-core</artifactId>
             <version>2.18.3</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.13.Final</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
