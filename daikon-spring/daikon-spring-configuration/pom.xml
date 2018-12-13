@@ -15,8 +15,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>tenancy</module>
-        <module>etcd</module>
-        <module>vault</module>
         <module>demo</module>
     </modules>
 

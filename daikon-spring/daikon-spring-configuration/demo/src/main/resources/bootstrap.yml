@@ -1,16 +1,6 @@
 spring:
-  application:
-    name: vault-secured-value
   cloud:
-    vault:
-      generic:
-        enabled: false
-      kv:
-        enabled: true
-      scheme: http
-      host: localhost
-      port: 8200
-      authentication: TOKEN
-      token: "VdCAzbB1mvEcC91wMBAjxdEj"
-etcd:
-  url: "http://localhost:2379"
+    etcd:
+      uris:
+        - "http://localhost:2379"
+        - "http://localhost:4001"
