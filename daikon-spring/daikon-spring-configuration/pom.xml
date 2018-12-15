@@ -9,11 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>daikon-spring-configuration</groupId>
     <artifactId>daikon-spring-configuration</artifactId>
     <version>0.30.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>etcd</module>
         <module>tenancy</module>
         <module>demo</module>
     </modules>

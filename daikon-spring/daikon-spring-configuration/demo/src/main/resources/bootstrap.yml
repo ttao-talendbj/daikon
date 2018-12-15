@@ -3,4 +3,15 @@ spring:
     etcd:
       uris:
         - "http://localhost:2379"
-        - "http://localhost:4001"
+      user: "application"
+      password: "app"
+    vault:
+      generic:
+        enabled: false
+      kv:
+        enabled: true
+      scheme: http
+      host: localhost
+      port: 8200
+      authentication: TOKEN
+      token: "VdCAzbB1mvEcC91wMBAjxdEj"
