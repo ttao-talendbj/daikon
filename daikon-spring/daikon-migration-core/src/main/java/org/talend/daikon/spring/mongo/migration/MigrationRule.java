@@ -26,7 +26,7 @@ public @interface MigrationRule {
      * introduced.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @return A version string this migration applies to.
      */
     String version();
