@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -74,9 +75,13 @@ public class EtcdPropertySource extends EnumerablePropertySource<Client> {
             process(response);
 
             // Init watch client
-            final WatchOption watchOption = WatchOption.newBuilder().withPrefix(key).build();
-            final Watch watchClient = client.getWatchClient();
-            watchClient.watch(key, watchOption, new ChangeListener());
+            if (Optional.ofNullable(context).isPresent()) {
+                final WatchOption watchOption = WatchOption.newBuilder().withPrefix(key).build();
+                final Watch watchClient = client.getWatchClient();
+                watchClient.watch(key, watchOption, new ChangeListener());
+            } else {
+                LOGGER.warn("No configuration reload capabilities (no application context).");
+            }
         } catch (InterruptedException | ExecutionException e) {
             LOGGER.error("Unable to init properties.", e);
         }
@@ -124,13 +129,14 @@ public class EtcdPropertySource extends EnumerablePropertySource<Client> {
         @Override
         public void onNext(WatchResponse watchResponse) {
             final List<WatchEvent> events = watchResponse.getEvents();
-            final Set<String> modifiedKeys = events.stream().peek(e -> {
-                if (e.getEventType() == WatchEvent.EventType.PUT) {
-                    process(e.getKeyValue());
-                } else {
-                    delete(e.getKeyValue());
-                }
-            }) //
+            final Set<String> modifiedKeys = events.stream() //
+                    .peek(e -> {
+                        if (e.getEventType() == WatchEvent.EventType.PUT) {
+                            process(e.getKeyValue());
+                        } else {
+                            delete(e.getKeyValue());
+                        }
+                    }) //
                     .map(e -> extractKey(e.getKeyValue())) //
                     .collect(Collectors.toSet());
 

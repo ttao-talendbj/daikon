@@ -39,9 +39,6 @@ public class EtcdConfigProperties {
 
     private TimeUnit timeoutUnit = TimeUnit.SECONDS;
 
-    public EtcdConfigProperties() {
-    }
-
     public boolean isEnabled() {
         return enabled;
     }

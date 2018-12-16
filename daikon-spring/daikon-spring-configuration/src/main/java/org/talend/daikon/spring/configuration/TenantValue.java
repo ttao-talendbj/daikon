@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * annotated field receives a value that is tenant dependent.
  * </p>
  * <p>
- * Annotation has 2 effects:
+ * Annotation has two effects:
  * <ul>
  *     <li>Bean <b>must</b> have <i>prototype</i> scope (singleton scope is not allowed).</li>
  *     <li>A tenancy context must be available at the time the bean is created.</li>
