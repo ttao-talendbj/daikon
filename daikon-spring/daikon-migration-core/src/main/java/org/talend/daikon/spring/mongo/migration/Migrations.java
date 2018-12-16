@@ -47,7 +47,7 @@ public class Migrations {
      * </ul>
      * </p>
      *
-     * @param source The source object (a {MongoDB's DBObject for example).
+     * @param source The source object (a MongoDB's DBObject for example).
      * @param sourceVersion A {@link Function} to extract source version as a string.
      * @param target The target object (a POJO for example).
      * @param <S> The source type.

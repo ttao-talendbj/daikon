@@ -30,11 +30,11 @@ public class MigrationRegister {
      * @param migration The {@link Migration} implementation
      * @param <T> The type of the class registered for migration.
      */
-    public static <T> void register(Class<T> clazz, Class<? extends Migration<?, T>> migration) {
+    public static synchronized <T> void register(Class<T> clazz, Class<? extends Migration<?, T>> migration) {
         if (registrations.get(clazz) == null) {
-            final List<Class<?>> registrations = new ArrayList<>();
-            registrations.add(migration);
-            MigrationRegister.registrations.put(clazz, registrations);
+            final List<Class<?>> newMigrations = new ArrayList<>();
+            newMigrations.add(migration);
+            registrations.put(clazz, newMigrations);
         } else {
             registrations.get(clazz).add(migration);
         }
