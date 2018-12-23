@@ -15,6 +15,7 @@ package org.talend.daikon.security;
 import java.io.UnsupportedEncodingException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.KeySpec;
+import java.util.function.Function;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -27,7 +28,7 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * Encrypt and decrypt strings, encapsulating the cryptography algorithm and configured by a passphrase.
  */
-public class CryptoHelper {
+public class CryptoHelper implements Function<String, String> {
 
     private static final String UTF8 = "UTF8"; //$NON-NLS-1$
 
@@ -130,4 +131,8 @@ public class CryptoHelper {
         }
     }
 
+    @Override
+    public String apply(String s) {
+        return encrypt(s);
+    }
 }
