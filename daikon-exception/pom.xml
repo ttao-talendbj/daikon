@@ -114,10 +114,8 @@
 								<DynamicImport-Package>*</DynamicImport-Package>
 								<Service-Component>*</Service-Component>
 								<Embed-Transitive>true</Embed-Transitive>
-								<Embed-Dependency>*;artifactId=paranamer|snappy-java|commons-compress|xz;inline=true
-								</Embed-Dependency>
 								<Import-Package>
-									com.cedarsoftware.*;resolution:=optional,com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
+									com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
 								</Import-Package>
 							</instructions>
 						</configuration>
